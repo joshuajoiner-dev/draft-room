@@ -1,15 +1,18 @@
 import { reassignPlayer, unassignPlayer, undoLatestAssignment } from "@/lib/room/actions";
+import { PrintTeamsButton } from "@/components/room/PrintTeamsButton";
 import type { Player, RoomStatus, Team, TeamAssignment } from "@/types/database";
 
 type GeneratedTeamsProps = {
   roomId: string;
+  roomName: string;
+  roomCode: string;
   roomStatus: RoomStatus;
   teams: Team[];
   assignments: TeamAssignment[];
   players: Player[];
 };
 
-export function GeneratedTeams({ roomId, roomStatus, teams, assignments, players }: GeneratedTeamsProps) {
+export function GeneratedTeams({ roomId, roomName, roomCode, roomStatus, teams, assignments, players }: GeneratedTeamsProps) {
   if (!teams.length) {
     return null;
   }
@@ -25,14 +28,22 @@ export function GeneratedTeams({ roomId, roomStatus, teams, assignments, players
   }
 
   return (
-    <section className="card stack">
+    <section className="card stack printable-teams">
+      <div className="print-only print-header">
+        <p>Draft Room</p>
+        <h1>{roomName}</h1>
+        <strong>Room Code: {roomCode}</strong>
+      </div>
+
       <div className="stack-tight">
         <h2>Generated Teams</h2>
         <p className="muted">{teams.length} teams generated from the current room players.</p>
       </div>
 
+      <PrintTeamsButton />
+
       {canOverride ? (
-        <form action={undoLatestAssignment.bind(null, roomId, "admin")}>
+        <form action={undoLatestAssignment.bind(null, roomId, "admin")} className="print-hidden">
           <button className="button button-secondary" type="submit">
             Undo Last Assignment
           </button>

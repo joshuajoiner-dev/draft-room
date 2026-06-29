@@ -1,8 +1,11 @@
 import { makeCaptainPick, reassignPlayer, unassignPlayer, undoLatestAssignment } from "@/lib/room/actions";
+import { PrintTeamsButton } from "@/components/room/PrintTeamsButton";
 import type { CaptainPick, Player, RoomStatus, Team, TeamAssignment } from "@/types/database";
 
 type CaptainDraftBoardProps = {
   roomId: string;
+  roomName: string;
+  roomCode: string;
   roomStatus: RoomStatus;
   teams: Team[];
   players: Player[];
@@ -13,6 +16,8 @@ type CaptainDraftBoardProps = {
 
 export function CaptainDraftBoard({
   roomId,
+  roomName,
+  roomCode,
   roomStatus,
   teams,
   players,
@@ -38,8 +43,8 @@ export function CaptainDraftBoard({
   }
 
   return (
-    <div className="stack">
-      <section className="card stack">
+    <div className="stack print-scope">
+      <section className="card stack print-hidden">
         <div className="stack-tight">
           <p className="badge">{isComplete ? "Complete" : `Round ${currentRound}`}</p>
           <h1 className="page-title">{isComplete ? "Final Teams" : currentTeam?.name}</h1>
@@ -53,14 +58,22 @@ export function CaptainDraftBoard({
         {error ? <div className="error">{error}</div> : null}
       </section>
 
-      <section className="card stack" data-testid="draft-teams">
+      <section className="card stack printable-teams" data-testid="draft-teams">
+        <div className="print-only print-header">
+          <p>Draft Room</p>
+          <h1>{roomName}</h1>
+          <strong>Room Code: {roomCode}</strong>
+        </div>
+
         <div className="stack-tight">
           <h2>{isComplete ? "Final Teams" : "Teams"}</h2>
           <p className="muted">Draft order follows the team order.</p>
         </div>
 
+        {isComplete ? <PrintTeamsButton /> : null}
+
         {canOverride ? (
-          <form action={undoLatestAssignment.bind(null, roomId, "draft")}>
+          <form action={undoLatestAssignment.bind(null, roomId, "draft")} className="print-hidden">
             <button className="button button-secondary" type="submit">
               Undo Last Assignment
             </button>

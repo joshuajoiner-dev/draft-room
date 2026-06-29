@@ -24,6 +24,8 @@ export default async function CaptainDraftPage({ params, searchParams }: Captain
 
         <CaptainDraftBoard
           roomId={room.id}
+          roomName={room.name}
+          roomCode={room.join_code}
           roomStatus={room.status}
           teams={teams}
           players={players}

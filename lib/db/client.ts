@@ -8,6 +8,18 @@ export function hasSupabaseConfig() {
   return Boolean(supabaseUrl && supabasePublishableKey);
 }
 
+export function getSupabaseHost() {
+  if (!supabaseUrl) {
+    return "missing";
+  }
+
+  try {
+    return new URL(supabaseUrl).host;
+  } catch {
+    return "invalid";
+  }
+}
+
 export function createSupabaseBrowserClient() {
   if (!supabaseUrl || !supabasePublishableKey) {
     throw new Error("Missing Supabase environment variables.");

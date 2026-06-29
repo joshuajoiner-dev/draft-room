@@ -98,6 +98,8 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
         ) : (
           <GeneratedTeams
             roomId={room.id}
+            roomName={room.name}
+            roomCode={room.join_code}
             roomStatus={room.status}
             teams={teams}
             assignments={assignments}

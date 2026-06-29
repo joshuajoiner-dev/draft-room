@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/db/client";
+import { createSupabaseServerClient, getSupabaseHost } from "@/lib/db/client";
 import { normalizeName, validatePlayerName, validateRoomName } from "@/lib/room/validation";
 
 type OverrideReturnTarget = "admin" | "draft";
@@ -25,6 +25,59 @@ function revalidateRoomPaths(roomId: string) {
   revalidatePath(`/room/${roomId}/draft`);
 }
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === "object" && error && "message" in error) {
+    return String((error as { message?: unknown }).message);
+  }
+
+  return "Unknown error.";
+}
+
+function getErrorCause(error: unknown) {
+  const cause = error instanceof Error ? (error as Error & { cause?: unknown }).cause : undefined;
+
+  if (cause instanceof Error) {
+    return {
+      name: cause.name,
+      message: cause.message
+    };
+  }
+
+  if (cause) {
+    return String(cause);
+  }
+
+  return undefined;
+}
+
+function logCreateRoomFailure(error: unknown, attempt?: number) {
+  console.error("createRoom failed", {
+    attempt,
+    supabaseHost: getSupabaseHost(),
+    name: error instanceof Error ? error.name : undefined,
+    message: getErrorMessage(error),
+    cause: getErrorCause(error)
+  });
+}
+
+function createRoomRedirectMessage(error: unknown) {
+  const message = getErrorMessage(error);
+
+  if (message.toLowerCase().includes("fetch failed")) {
+    return "Could not reach Supabase. Check the production NEXT_PUBLIC_SUPABASE_URL.";
+  }
+
+  if (message === "Missing Supabase environment variables.") {
+    return message;
+  }
+
+  return `Could not create room: ${message}`;
+}
+
 export async function createRoom(formData: FormData) {
   const name = normalizeName(formData.get("name"));
   const error = validateRoomName(name);
@@ -33,26 +86,49 @@ export async function createRoom(formData: FormData) {
     redirect(`/room/new?error=${encodeURIComponent(error)}`);
   }
 
-  const supabase = createSupabaseServerClient();
+  let supabase: ReturnType<typeof createSupabaseServerClient>;
+
+  try {
+    supabase = createSupabaseServerClient();
+  } catch (clientError) {
+    logCreateRoomFailure(clientError);
+    redirect(`/room/new?error=${encodeURIComponent(createRoomRedirectMessage(clientError))}`);
+  }
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const { data, error: insertError } = await supabase
-      .from("rooms")
-      .insert({
-        name,
-        join_code: createJoinCode()
-      })
-      .select("id")
-      .single();
+    let result;
+
+    try {
+      result = await supabase
+        .from("rooms")
+        .insert({
+          name,
+          join_code: createJoinCode()
+        })
+        .select("id")
+        .single();
+    } catch (insertError) {
+      logCreateRoomFailure(insertError, attempt + 1);
+      redirect(`/room/new?error=${encodeURIComponent(createRoomRedirectMessage(insertError))}`);
+    }
+
+    const { data, error: insertError } = result;
 
     if (data) {
       redirect(`/room/${data.id}/admin`);
     }
 
     if (insertError?.code !== "23505") {
-      redirect(`/room/new?error=${encodeURIComponent(insertError?.message ?? "Could not create room.")}`);
+      logCreateRoomFailure(insertError ?? new Error("Unknown Supabase insert error."), attempt + 1);
+      const message = insertError?.message ? `Could not create room: ${insertError.message}` : "Could not create room.";
+      redirect(`/room/new?error=${encodeURIComponent(message)}`);
     }
   }
+
+  console.error("createRoom failed", {
+    supabaseHost: getSupabaseHost(),
+    message: "Could not create a unique join code after 4 attempts."
+  });
 
   redirect("/room/new?error=Could%20not%20create%20a%20unique%20join%20code.");
 }
