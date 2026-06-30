@@ -29,13 +29,19 @@ function hasLocalUnlock() {
 }
 
 function storeLocalUnlock() {
-  window.localStorage.setItem(
-    COMPLETE_UNLOCK_KEY,
-    JSON.stringify({
-      unlocked: true,
-      unlockedAt: new Date().toISOString()
-    })
-  );
+  try {
+    window.localStorage.setItem(
+      COMPLETE_UNLOCK_KEY,
+      JSON.stringify({
+        unlocked: true,
+        unlockedAt: new Date().toISOString()
+      })
+    );
+
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function LockedModeCard({ title, description }: { title: string; description: string }) {
@@ -78,11 +84,14 @@ export function FeatureGatedModes({ quickRandom, balancedRandom, captainDraft }:
       const result = await validateUnlockCode(formData);
 
       if (result.success) {
-        storeLocalUnlock();
+        const didStoreUnlock = storeLocalUnlock();
+
         setIsUnlocked(true);
         setMessage({
           tone: "success",
-          text: result.message
+          text: didStoreUnlock
+            ? result.message
+            : "Draft Room Complete unlocked for this session. Browser storage is unavailable."
         });
         form.reset();
         return;
@@ -126,25 +135,25 @@ export function FeatureGatedModes({ quickRandom, balancedRandom, captainDraft }:
         ) : null}
       </section>
 
-      {isUnlocked ? (
-        quickRandom
-      ) : (
+      {!isUnlocked ? (
         <LockedModeCard
           title="⚡ Quick Random"
           description="Choose a team count and randomly assign all current players."
         />
-      )}
+      ) : null}
+
+      <div hidden={!isUnlocked}>{quickRandom}</div>
 
       {balancedRandom}
 
-      {isUnlocked ? (
-        captainDraft
-      ) : (
+      {!isUnlocked ? (
         <LockedModeCard
           title="👥 Captain Draft"
           description="Choose one captain per team. Captains start on their own teams."
         />
-      )}
+      ) : null}
+
+      <div hidden={!isUnlocked}>{captainDraft}</div>
     </>
   );
 }
