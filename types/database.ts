@@ -54,6 +54,14 @@ export type UndoStackItem = {
   created_at: string;
 };
 
+export type UnlockCode = {
+  id: string;
+  code: string;
+  is_active: boolean;
+  redeemed_at: string | null;
+  created_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -128,9 +136,27 @@ export type Database = {
         };
         Update: Partial<Omit<UndoStackItem, "id" | "room_id" | "created_at">>;
       };
+      unlock_codes: {
+        Row: UnlockCode;
+        Insert: {
+          id?: string;
+          code: string;
+          is_active?: boolean;
+          redeemed_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Omit<UnlockCode, "id" | "created_at">>;
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      redeem_unlock_code: {
+        Args: {
+          input_code: string;
+        };
+        Returns: boolean;
+      };
+    };
     Enums: {
       [_ in never]: never;
     };

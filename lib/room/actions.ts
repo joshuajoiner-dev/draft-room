@@ -78,6 +78,48 @@ function createRoomRedirectMessage(error: unknown) {
   return `Could not create room: ${message}`;
 }
 
+export async function validateUnlockCode(formData: FormData) {
+  const code = String(formData.get("code") ?? "")
+    .trim()
+    .toUpperCase();
+
+  if (!code) {
+    return {
+      success: false,
+      message: "Enter an unlock code."
+    };
+  }
+
+  const supabase = createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("redeem_unlock_code", {
+    input_code: code
+  });
+
+  if (error) {
+    console.error("validateUnlockCode failed", {
+      supabaseHost: getSupabaseHost(),
+      message: error.message
+    });
+
+    return {
+      success: false,
+      message: "Could not validate unlock code."
+    };
+  }
+
+  if (data !== true) {
+    return {
+      success: false,
+      message: "Unlock code not found."
+    };
+  }
+
+  return {
+    success: true,
+    message: "Draft Room Complete unlocked."
+  };
+}
+
 export async function createRoom(formData: FormData) {
   const name = normalizeName(formData.get("name"));
   const error = validateRoomName(name);

@@ -4,6 +4,7 @@ import { AppFrame } from "@/components/layout/AppFrame";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
+import { FeatureGatedModes } from "@/components/room/FeatureGatedModes";
 import { GeneratedTeams } from "@/components/room/GeneratedTeams";
 import { PlayerNameForm } from "@/components/room/PlayerNameForm";
 import { QRCodePanel } from "@/components/room/QRCodePanel";
@@ -72,25 +73,31 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
 
         <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
 
-        <RandomTeamsForm
-          roomId={room.id}
-          playerCount={players.length}
-          hasTeams={teams.length > 0}
-          message={randomTeamsMessage}
-        />
-
-        <BalancedRandomForm
-          roomId={room.id}
-          playerCount={players.length}
-          hasTeams={teams.length > 0}
-          message={balancedRandomMessage}
-        />
-
-        <CaptainDraftSetupForm
-          roomId={room.id}
-          players={players}
-          hasCaptainTeams={isCaptainDraft && teams.length > 0}
-          message={captainDraftMessage}
+        <FeatureGatedModes
+          quickRandom={
+            <RandomTeamsForm
+              roomId={room.id}
+              playerCount={players.length}
+              hasTeams={teams.length > 0}
+              message={randomTeamsMessage}
+            />
+          }
+          balancedRandom={
+            <BalancedRandomForm
+              roomId={room.id}
+              playerCount={players.length}
+              hasTeams={teams.length > 0}
+              message={balancedRandomMessage}
+            />
+          }
+          captainDraft={
+            <CaptainDraftSetupForm
+              roomId={room.id}
+              players={players}
+              hasCaptainTeams={isCaptainDraft && teams.length > 0}
+              message={captainDraftMessage}
+            />
+          }
         />
 
         {isCaptainDraft ? (

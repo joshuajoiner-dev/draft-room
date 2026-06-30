@@ -285,6 +285,19 @@ a:focus-visible {
   padding: 12px;
 }
 
+.locked-mode {
+  opacity: 0.82;
+}
+
+.locked-message {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-weight: 800;
+  padding: 12px;
+}
+
 .toast {
   position: fixed;
   right: 16px;

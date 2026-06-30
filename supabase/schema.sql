@@ -58,6 +58,14 @@ create table if not exists undo_stack (
   created_at timestamptz not null default now()
 );
 
+create table if not exists unlock_codes (
+  id uuid primary key default gen_random_uuid(),
+  code text unique not null,
+  is_active boolean not null default true,
+  redeemed_at timestamptz null,
+  created_at timestamptz not null default now()
+);
+
 create unique index if not exists teams_room_draft_order_idx
   on teams (room_id, draft_order)
   where draft_order is not null;
@@ -73,6 +81,38 @@ alter table teams enable row level security;
 alter table team_assignments enable row level security;
 alter table captain_picks enable row level security;
 alter table undo_stack enable row level security;
+alter table unlock_codes enable row level security;
+
+create or replace function redeem_unlock_code(input_code text)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  matching_code_id uuid;
+begin
+  select id
+  into matching_code_id
+  from unlock_codes
+  where code = input_code
+    and is_active = true
+  limit 1;
+
+  if matching_code_id is null then
+    return false;
+  end if;
+
+  update unlock_codes
+  set redeemed_at = now()
+  where id = matching_code_id
+    and redeemed_at is null;
+
+  return true;
+end;
+$$;
+
+grant execute on function redeem_unlock_code(text) to anon;
 
 create policy "rooms are publicly readable" on rooms for select using (true);
 create policy "rooms can be created" on rooms for insert with check (true);
