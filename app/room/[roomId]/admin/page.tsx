@@ -36,6 +36,8 @@ function getOrigin() {
   return `${protocol}://${host}`;
 }
 
+const upgradeCheckoutUrl = process.env.NEXT_PUBLIC_UPGRADE_CHECKOUT_URL ?? "#complete-unlock";
+
 export default async function AdminPage({ params, searchParams }: AdminPageProps) {
   const { room, players, teams, assignments } = await getRoomState(params.roomId);
   const joinUrl = `${getOrigin()}/room/${room.id}/join`;
@@ -67,11 +69,18 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
       <div className="stack">
         <RoomHeader room={room} />
 
-        <QRCodePanel joinUrl={joinUrl} />
+        <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
 
         <RoomPlayerList roomId={room.id} players={players} />
 
         <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
+
+        <BalancedRandomForm
+          roomId={room.id}
+          playerCount={players.length}
+          hasTeams={teams.length > 0}
+          message={balancedRandomMessage}
+        />
 
         <FeatureGatedModes
           quickRandom={
@@ -80,14 +89,6 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
               playerCount={players.length}
               hasTeams={teams.length > 0}
               message={randomTeamsMessage}
-            />
-          }
-          balancedRandom={
-            <BalancedRandomForm
-              roomId={room.id}
-              playerCount={players.length}
-              hasTeams={teams.length > 0}
-              message={balancedRandomMessage}
             />
           }
           captainDraft={

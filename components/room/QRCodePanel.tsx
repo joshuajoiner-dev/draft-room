@@ -6,11 +6,22 @@ import QRCode from "qrcode";
 
 type QRCodePanelProps = {
   joinUrl: string;
+  upgradeHref?: string;
 };
 
-export function QRCodePanel({ joinUrl }: QRCodePanelProps) {
+function shortenUrl(url: string) {
+  try {
+    const parsedUrl = new URL(url);
+    return `${parsedUrl.host}${parsedUrl.pathname}`;
+  } catch {
+    return url;
+  }
+}
+
+export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
   const [src, setSrc] = useState("");
   const [copyStatus, setCopyStatus] = useState("");
+  const displayUrl = shortenUrl(joinUrl);
 
   useEffect(() => {
     let mounted = true;
@@ -47,10 +58,15 @@ export function QRCodePanel({ joinUrl }: QRCodePanelProps) {
       </div>
 
       <div className="join-link-row">
-        <div className="link-box">{joinUrl}</div>
-        <button aria-label="Copy join link" className="button button-secondary" onClick={copyJoinLink} type="button">
+        <div className="link-box" title={joinUrl}>{displayUrl}</div>
+        <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
           Copy Link
         </button>
+        {upgradeHref ? (
+          <a className="button button-orange" href={upgradeHref}>
+            Upgrade Now
+          </a>
+        ) : null}
       </div>
 
       {copyStatus ? (

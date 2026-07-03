@@ -22,6 +22,7 @@ export function RoomPlayerList({ roomId, players }: RoomPlayerListProps) {
     }
 
     const supabase = createSupabaseBrowserClient();
+    let isActive = true;
 
     async function refreshPlayers() {
       const { data } = await supabase
@@ -30,10 +31,12 @@ export function RoomPlayerList({ roomId, players }: RoomPlayerListProps) {
         .eq("room_id", roomId)
         .order("joined_at", { ascending: true });
 
-      if (data) {
+      if (data && isActive) {
         setVisiblePlayers(data as Player[]);
       }
     }
+
+    const pollId = window.setInterval(refreshPlayers, 2500);
 
     const channel = supabase
       .channel(`players:${roomId}`)
@@ -50,6 +53,8 @@ export function RoomPlayerList({ roomId, players }: RoomPlayerListProps) {
       .subscribe();
 
     return () => {
+      isActive = false;
+      window.clearInterval(pollId);
       void supabase.removeChannel(channel);
     };
   }, [roomId]);

@@ -1,4 +1,5 @@
 import { makeCaptainPick, reassignPlayer, unassignPlayer, undoLatestAssignment } from "@/lib/room/actions";
+import { CountdownTimer } from "@/components/room/CountdownTimer";
 import { PrintTeamsButton } from "@/components/room/PrintTeamsButton";
 import type { CaptainPick, Player, RoomStatus, Team, TeamAssignment } from "@/types/database";
 
@@ -32,6 +33,10 @@ export function CaptainDraftBoard({
   const isComplete = availablePlayers.length === 0;
   const canOverride = roomStatus !== "finalized";
   const pickCount = captainPicks.length;
+  const captainCount = teams.length;
+  const draftedPlayerCount = Math.max(0, assignments.length - captainCount);
+  const totalDraftablePlayers = Math.max(0, players.length - captainCount);
+  const progressPercent = totalDraftablePlayers ? Math.round((draftedPlayerCount / totalDraftablePlayers) * 100) : 100;
   const currentTeam = teams.length && !isComplete ? teams[pickCount % teams.length] : null;
   const currentCaptain = currentTeam?.captain_player_id ? playersById.get(currentTeam.captain_player_id) : null;
   const currentRound = currentTeam ? Math.floor(pickCount / teams.length) + 1 : null;
@@ -55,6 +60,31 @@ export function CaptainDraftBoard({
           </p>
         </div>
 
+        <div className="draft-progress" aria-label={`${draftedPlayerCount} of ${totalDraftablePlayers} draft picks complete`}>
+          <div className="draft-progress-header">
+            <span>Draft progress</span>
+            <strong>
+              {draftedPlayerCount}/{totalDraftablePlayers}
+            </strong>
+          </div>
+          <div className="draft-progress-track">
+            <div className="draft-progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+        </div>
+
+        {!isComplete ? <CountdownTimer /> : null}
+
+        {isComplete ? (
+          <div className="confetti-burst" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        ) : null}
+
         {error ? <div className="error">{error}</div> : null}
       </section>
 
@@ -75,7 +105,7 @@ export function CaptainDraftBoard({
         {canOverride ? (
           <form action={undoLatestAssignment.bind(null, roomId, "draft")} className="print-hidden">
             <button className="button button-secondary" type="submit">
-              Undo Last Assignment
+              Undo Last Pick
             </button>
           </form>
         ) : (

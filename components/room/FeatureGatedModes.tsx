@@ -8,7 +8,6 @@ const COMPLETE_UNLOCK_KEY = "draft-room-complete-unlocked";
 
 type FeatureGatedModesProps = {
   quickRandom: ReactNode;
-  balancedRandom: ReactNode;
   captainDraft: ReactNode;
 };
 
@@ -60,7 +59,7 @@ function LockedModeCard({ title, description }: { title: string; description: st
   );
 }
 
-export function FeatureGatedModes({ quickRandom, balancedRandom, captainDraft }: FeatureGatedModesProps) {
+export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedModesProps) {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [message, setMessage] = useState<UnlockMessage | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -115,7 +114,7 @@ export function FeatureGatedModes({ quickRandom, balancedRandom, captainDraft }:
         {message ? <div className={message.tone === "success" ? "success" : "error"}>{message.text}</div> : null}
 
         {!isUnlocked ? (
-          <form className="form" onSubmit={handleSubmit}>
+          <form className="unlock-form" onSubmit={handleSubmit}>
             <label className="label">
               Unlock code
               <input
@@ -128,7 +127,7 @@ export function FeatureGatedModes({ quickRandom, balancedRandom, captainDraft }:
               />
             </label>
 
-            <button className="button" type="submit" disabled={isPending}>
+            <button className="button button-orange unlock-submit" type="submit" disabled={isPending}>
               {isPending ? "Checking..." : "Unlock Complete"}
             </button>
           </form>
@@ -143,8 +142,6 @@ export function FeatureGatedModes({ quickRandom, balancedRandom, captainDraft }:
       ) : null}
 
       <div hidden={!isUnlocked}>{quickRandom}</div>
-
-      {balancedRandom}
 
       {!isUnlocked ? (
         <LockedModeCard
