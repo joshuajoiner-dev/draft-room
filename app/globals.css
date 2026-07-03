@@ -151,6 +151,76 @@ select {
   gap: 18px;
 }
 
+.admin-top-grid {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+.admin-helper-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-quick-guide,
+.manual-admin-timer {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(255, 138, 31, 0.24);
+  border-radius: 8px;
+  background: rgba(255, 138, 31, 0.08);
+  padding: 14px;
+}
+
+.admin-panel-label {
+  margin: 0;
+  color: var(--upgrade);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-quick-guide ol {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.admin-quick-guide a {
+  color: var(--upgrade);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.manual-timer-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.manual-timer-header strong {
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.manual-timer-input {
+  min-height: 40px;
+}
+
+.manual-timer-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .room-code {
   display: inline-grid;
   width: fit-content;
@@ -682,6 +752,10 @@ a:focus-visible {
 @media (min-width: 800px) {
   .app-main {
     padding: 24px 18px 64px;
+  }
+
+  .admin-top-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
   }
 
   .room-header {
