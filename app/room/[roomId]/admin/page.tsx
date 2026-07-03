@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
-import { AdminQuickGuide } from "@/components/room/AdminQuickGuide";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
 import { FeatureGatedModes } from "@/components/room/FeatureGatedModes";
 import { GeneratedTeams } from "@/components/room/GeneratedTeams";
-import { ManualAdminTimer } from "@/components/room/ManualAdminTimer";
 import { PlayerNameForm } from "@/components/room/PlayerNameForm";
 import { QRCodePanel } from "@/components/room/QRCodePanel";
 import { RandomTeamsForm } from "@/components/room/RandomTeamsForm";
@@ -69,14 +67,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   return (
     <AppFrame>
       <div className="stack">
-        <div className="admin-top-grid">
-          <RoomHeader room={room} />
-
-          <aside className="admin-helper-panel" aria-label="Admin organizer tools">
-            <AdminQuickGuide />
-            <ManualAdminTimer />
-          </aside>
-        </div>
+        <RoomHeader room={room} />
 
         <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
 
