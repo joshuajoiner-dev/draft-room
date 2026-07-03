@@ -151,15 +151,16 @@ select {
   gap: 18px;
 }
 
-.admin-top-grid {
+.admin-page-grid {
   display: grid;
-  gap: 16px;
+  gap: 20px;
   align-items: start;
 }
 
-.admin-helper-panel {
+.admin-share-column,
+.admin-workflow-column {
   display: grid;
-  gap: 12px;
+  gap: 20px;
 }
 
 .admin-quick-guide,
@@ -754,8 +755,8 @@ a:focus-visible {
     padding: 24px 18px 64px;
   }
 
-  .admin-top-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  .admin-page-grid {
+    grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
   }
 
   .room-header {

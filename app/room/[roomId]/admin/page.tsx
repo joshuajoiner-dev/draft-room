@@ -69,46 +69,47 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   return (
     <AppFrame>
       <div className="stack">
-        <div className="admin-top-grid">
-          <RoomHeader room={room} />
-
-          <aside className="admin-helper-panel" aria-label="Admin organizer tools">
+        <div className="admin-page-grid">
+          <div className="admin-share-column">
+            <RoomHeader room={room} />
             <AdminQuickGuide />
             <ManualAdminTimer />
-          </aside>
-        </div>
 
-        <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
+            <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
+          </div>
 
-        <RoomPlayerList roomId={room.id} players={players} />
+          <div className="admin-workflow-column">
+            <RoomPlayerList roomId={room.id} players={players} />
 
-        <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
+            <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
 
-        <BalancedRandomForm
-          roomId={room.id}
-          playerCount={players.length}
-          hasTeams={teams.length > 0}
-          message={balancedRandomMessage}
-        />
-
-        <FeatureGatedModes
-          quickRandom={
-            <RandomTeamsForm
+            <BalancedRandomForm
               roomId={room.id}
               playerCount={players.length}
               hasTeams={teams.length > 0}
-              message={randomTeamsMessage}
+              message={balancedRandomMessage}
             />
-          }
-          captainDraft={
-            <CaptainDraftSetupForm
-              roomId={room.id}
-              players={players}
-              hasCaptainTeams={isCaptainDraft && teams.length > 0}
-              message={captainDraftMessage}
+
+            <FeatureGatedModes
+              quickRandom={
+                <RandomTeamsForm
+                  roomId={room.id}
+                  playerCount={players.length}
+                  hasTeams={teams.length > 0}
+                  message={randomTeamsMessage}
+                />
+              }
+              captainDraft={
+                <CaptainDraftSetupForm
+                  roomId={room.id}
+                  players={players}
+                  hasCaptainTeams={isCaptainDraft && teams.length > 0}
+                  message={captainDraftMessage}
+                />
+              }
             />
-          }
-        />
+          </div>
+        </div>
 
         {isCaptainDraft ? (
           <CaptainDraftSummary roomId={room.id} teams={teams} players={players} />
