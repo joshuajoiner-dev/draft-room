@@ -527,6 +527,12 @@ a:focus-visible {
   gap: 8px;
 }
 
+.draft-guidance {
+  max-width: 620px;
+  margin: 0;
+  line-height: 1.5;
+}
+
 .draft-progress-header {
   display: flex;
   align-items: center;

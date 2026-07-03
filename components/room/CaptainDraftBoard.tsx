@@ -58,6 +58,9 @@ export function CaptainDraftBoard({
               ? "All players have been assigned."
               : `${currentCaptain?.name ?? "Current captain"} is picking now.`}
           </p>
+          <p className="muted draft-guidance">
+            Pass this device to the active captain for each pick, or make selections yourself.
+          </p>
         </div>
 
         <div className="draft-progress" aria-label={`${draftedPlayerCount} of ${totalDraftablePlayers} draft picks complete`}>
