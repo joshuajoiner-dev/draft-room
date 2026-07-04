@@ -25,6 +25,14 @@ type WebhookEventInput = {
   topic?: string | null;
 };
 
+type RecordWebhookEventResult =
+  | {
+      status: "recorded";
+    }
+  | {
+      status: "duplicate";
+    };
+
 const SENSITIVE_KEY_PARTS = [
   "authorization",
   "card",
@@ -172,6 +180,16 @@ export async function recordLicenseEvent(input: LicenseEventInput): Promise<void
 }
 
 export async function recordWebhookEvent(input: WebhookEventInput): Promise<void> {
+  const result = await recordWebhookEventOnce(input);
+
+  if (result.status === "duplicate") {
+    throw new Error(`Failed to record webhook event: duplicate webhook_id ${input.webhookId}`);
+  }
+}
+
+export async function recordWebhookEventOnce(
+  input: WebhookEventInput,
+): Promise<RecordWebhookEventResult> {
   const supabase = getCommerceSupabaseClient();
   const { error } = await supabase.from("webhook_events").insert({
     error_message: input.errorMessage ?? null,
@@ -185,6 +203,16 @@ export async function recordWebhookEvent(input: WebhookEventInput): Promise<void
   });
 
   if (error) {
+    if ("code" in error && error.code === "23505") {
+      return {
+        status: "duplicate",
+      };
+    }
+
     throw new Error(`Failed to record webhook event: ${error.message}`);
   }
+
+  return {
+    status: "recorded",
+  };
 }
