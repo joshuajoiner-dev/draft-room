@@ -754,13 +754,23 @@ a:focus-visible {
     padding: 24px 18px 64px;
   }
 
-  .admin-top-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  .admin-helper-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .room-header {
     grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
+  }
+}
+
+@media (min-width: 960px) {
+  .admin-top-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  }
+
+  .admin-helper-panel {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

@@ -1,4 +1,4 @@
-const guideSteps = ["Players Join", "Choose Your Format", "Click Generate"];
+const guideSteps = ["Players Join | Import Players", "Choose Your Format", "Click Generate"];
 
 export function AdminQuickGuide() {
   return (

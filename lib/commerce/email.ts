@@ -128,12 +128,17 @@ function buildUnlockCodeEmailHtml(input: SendUnlockCodeEmailInput, appUrl: strin
   const formattedCode = formatUnlockCode(input.unlockCode);
 
   return [
-    `<p>Thanks for purchasing <strong>${PRODUCT_NAME}</strong>.</p>`,
-    `<p><strong>Unlock code:</strong> ${formattedCode}<br />`,
-    `<strong>License ID:</strong> ${input.publicLicenseId}</p>`,
-    `<p><a href="${appUrl}">Open JoinDraftPick</a></p>`,
-    "<p>Enter this unlock code on the organizer screen to unlock Complete on this browser.</p>",
-    "<p>Keep this email for your records.</p>",
+    '<div style="margin:0;background:#f7f7f7;padding:24px 0;font-family:Arial,Helvetica,sans-serif;color:#171717;">',
+    '<div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e8e8e8;border-radius:8px;padding:28px;">',
+    `<p style="margin:0 0 18px;font-size:16px;line-height:1.5;">Thanks for purchasing <strong>${PRODUCT_NAME}</strong>.</p>`,
+    '<p style="margin:0 0 8px;color:#555555;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Unlock code</p>',
+    `<div style="margin:0 0 18px;padding:18px;border:1px solid #ffd0a3;border-radius:8px;background:#fff5eb;color:#171717;font-size:30px;font-weight:800;letter-spacing:0.08em;line-height:1.2;text-align:center;">${formattedCode}</div>`,
+    `<p style="margin:0 0 22px;color:#666666;font-size:13px;line-height:1.45;">License ID: <span style="font-weight:700;color:#333333;">${input.publicLicenseId}</span></p>`,
+    `<p style="margin:0 0 22px;"><a href="${appUrl}" style="display:inline-block;border-radius:8px;background:#ff8a1f;color:#180b00;font-size:16px;font-weight:800;padding:14px 18px;text-decoration:none;">Open JoinDraftPick</a></p>`,
+    '<p style="margin:0 0 8px;font-size:15px;line-height:1.5;">Enter this code on the organizer screen to unlock Complete on this browser.</p>',
+    '<p style="margin:0;color:#666666;font-size:13px;line-height:1.5;">Keep this email for your records.</p>',
+    "</div>",
+    "</div>",
   ].join("");
 }
 
