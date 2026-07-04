@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { validateLicenseUnlockCode } from "@/lib/commerce/licenses";
 import { createSupabaseServerClient, getSupabaseHost } from "@/lib/db/client";
 import { normalizeName, validatePlayerName, validateRoomName } from "@/lib/room/validation";
 
@@ -79,26 +80,33 @@ function createRoomRedirectMessage(error: unknown) {
 }
 
 export async function validateUnlockCode(formData: FormData) {
-  const code = String(formData.get("code") ?? "")
-    .trim()
-    .toUpperCase();
+  const code = String(formData.get("code") ?? "");
 
-  if (!code) {
+  if (!code.trim()) {
     return {
       success: false,
       message: "Enter an unlock code."
     };
   }
 
-  const supabase = createSupabaseServerClient();
-  const { data, error } = await supabase.rpc("redeem_unlock_code", {
-    input_code: code
-  });
+  try {
+    const result = await validateLicenseUnlockCode(code);
 
-  if (error) {
+    if (!result.success) {
+      return {
+        success: false,
+        message: "Could not unlock Complete with that code."
+      };
+    }
+
+    return {
+      success: true,
+      message: "Draft Room Complete unlocked.",
+      unlock: result.payload
+    };
+  } catch (error) {
     console.error("validateUnlockCode failed", {
-      supabaseHost: getSupabaseHost(),
-      message: error.message
+      message: getErrorMessage(error)
     });
 
     return {
@@ -106,18 +114,6 @@ export async function validateUnlockCode(formData: FormData) {
       message: "Could not validate unlock code."
     };
   }
-
-  if (data !== true) {
-    return {
-      success: false,
-      message: "Unlock code not found."
-    };
-  }
-
-  return {
-    success: true,
-    message: "Draft Room Complete unlocked."
-  };
 }
 
 export async function createRoom(formData: FormData) {

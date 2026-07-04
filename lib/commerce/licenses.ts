@@ -17,6 +17,7 @@ import {
   type UnlockCode,
 } from "./types";
 import {
+  normalizeUnlockCode,
   validateBillingEmail,
   validateLicenseOwnerEmail,
   validateProductKey,
@@ -52,6 +53,31 @@ type InsertedLicenseRow = {
   id: string;
   public_license_id: string;
 };
+
+type LicenseUnlockRow = {
+  activated_at: string | null;
+  id: string;
+  product_key: string;
+  public_license_id: string;
+};
+
+export type BrowserUnlockPayload = {
+  lastVerifiedAt: string;
+  licenseId: string;
+  productKey: string;
+  publicLicenseId: PublicLicenseId;
+  unlocked: true;
+  unlockedAt: string;
+};
+
+type LicenseUnlockValidationResult =
+  | {
+      payload: BrowserUnlockPayload;
+      success: true;
+    }
+  | {
+      success: false;
+    };
 
 const LICENSE_ID_RANDOM_LENGTH = 10;
 const MAX_LICENSE_INSERT_ATTEMPTS = 5;
@@ -346,4 +372,79 @@ export async function createLicenseFromShopifyOrder(
   }
 
   throw new Error("Failed to create Shopify license after retrying unique ID generation.");
+}
+
+export async function validateLicenseUnlockCode(
+  submittedCode: string,
+): Promise<LicenseUnlockValidationResult> {
+  const normalizedCode = normalizeUnlockCode(submittedCode);
+  const codeValidation = validateUnlockCode(normalizedCode);
+
+  if (!codeValidation.ok) {
+    return {
+      success: false,
+    };
+  }
+
+  const { config, supabase } = getCommerceSupabaseClient();
+  const unlockCodeHash = hashUnlockCode(codeValidation.value, config.licenseCodePepper);
+  const { data, error } = await supabase
+    .from("licenses")
+    .select("id,public_license_id,product_key,activated_at")
+    .eq("unlock_code_hash", unlockCodeHash)
+    .eq("status", "active")
+    .maybeSingle<LicenseUnlockRow>();
+
+  if (error || !data) {
+    return {
+      success: false,
+    };
+  }
+
+  const publicLicenseIdValidation = validatePublicLicenseId(data.public_license_id);
+
+  if (!publicLicenseIdValidation.ok) {
+    return {
+      success: false,
+    };
+  }
+
+  const now = new Date().toISOString();
+  const updatePayload =
+    data.activated_at === null
+      ? {
+          activated_at: now,
+          last_used_at: now,
+        }
+      : {
+          last_used_at: now,
+        };
+  let updateQuery = supabase
+    .from("licenses")
+    .update(updatePayload)
+    .eq("id", data.id);
+
+  if (data.activated_at === null) {
+    updateQuery = updateQuery.is("activated_at", null);
+  }
+
+  const { error: updateError } = await updateQuery;
+
+  if (updateError) {
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    payload: {
+      lastVerifiedAt: now,
+      licenseId: data.id,
+      productKey: data.product_key,
+      publicLicenseId: publicLicenseIdValidation.value,
+      unlocked: true,
+      unlockedAt: data.activated_at ?? now,
+    },
+    success: true,
+  };
 }
