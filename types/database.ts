@@ -1,5 +1,19 @@
 export type RoomStatus = "setup" | "drafting" | "finalized";
 export type TeamCreationMode = "captain_draft" | "random_teams" | "balanced_random";
+export type LicenseStatus =
+  | "pending"
+  | "active"
+  | "refunded"
+  | "revoked"
+  | "transferred"
+  | "archived";
+export type LicenseOrigin =
+  | "shopify"
+  | "manual"
+  | "organization"
+  | "complimentary"
+  | "test";
+export type WebhookEventStatus = "received" | "processed" | "ignored_duplicate" | "failed";
 
 export type Room = {
   id: string;
@@ -59,6 +73,48 @@ export type UnlockCode = {
   code: string;
   is_active: boolean;
   redeemed_at: string | null;
+  created_at: string;
+};
+
+export type License = {
+  id: string;
+  public_license_id: string;
+  license_owner_email: string;
+  billing_email: string | null;
+  unlock_code_hash: string;
+  license_origin: LicenseOrigin;
+  purchase_date: string | null;
+  created_at: string;
+  updated_at: string;
+  activated_at: string | null;
+  status: LicenseStatus;
+  last_used_at: string | null;
+  recovery_enabled: boolean;
+  version: number;
+  notes: string | null;
+  shopify_order_id: string | null;
+  shopify_customer_id: string | null;
+  product_key: string;
+};
+
+export type WebhookEvent = {
+  id: string;
+  provider: string;
+  webhook_id: string;
+  topic: string | null;
+  shopify_order_id: string | null;
+  status: WebhookEventStatus;
+  error_message: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  processed_at: string | null;
+};
+
+export type LicenseEvent = {
+  id: string;
+  license_id: string;
+  event_type: string;
+  metadata: Record<string, unknown>;
   created_at: string;
 };
 
@@ -146,6 +202,57 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Omit<UnlockCode, "id" | "created_at">>;
+      };
+      licenses: {
+        Row: License;
+        Insert: {
+          id?: string;
+          public_license_id: string;
+          license_owner_email: string;
+          billing_email?: string | null;
+          unlock_code_hash: string;
+          license_origin: LicenseOrigin;
+          purchase_date?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          activated_at?: string | null;
+          status: LicenseStatus;
+          last_used_at?: string | null;
+          recovery_enabled?: boolean;
+          version?: number;
+          notes?: string | null;
+          shopify_order_id?: string | null;
+          shopify_customer_id?: string | null;
+          product_key?: string;
+        };
+        Update: Partial<Omit<License, "id" | "created_at">>;
+      };
+      webhook_events: {
+        Row: WebhookEvent;
+        Insert: {
+          id?: string;
+          provider?: string;
+          webhook_id: string;
+          topic?: string | null;
+          shopify_order_id?: string | null;
+          status: WebhookEventStatus;
+          error_message?: string | null;
+          metadata?: Record<string, unknown>;
+          created_at?: string;
+          processed_at?: string | null;
+        };
+        Update: Partial<Omit<WebhookEvent, "id" | "created_at">>;
+      };
+      license_events: {
+        Row: LicenseEvent;
+        Insert: {
+          id?: string;
+          license_id: string;
+          event_type: string;
+          metadata?: Record<string, unknown>;
+          created_at?: string;
+        };
+        Update: Partial<Omit<LicenseEvent, "id" | "created_at">>;
       };
     };
     Views: Record<string, never>;
