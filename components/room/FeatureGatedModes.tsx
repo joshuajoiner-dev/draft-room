@@ -16,6 +16,24 @@ type UnlockMessage = {
   text: string;
 };
 
+type BrowserUnlockPayload = {
+  lastVerifiedAt: string;
+  licenseId: string;
+  productKey: string;
+  publicLicenseId: string;
+  unlocked: true;
+  unlockedAt: string;
+};
+
+type StoredUnlockPayload = {
+  lastVerifiedAt?: string;
+  licenseId?: string;
+  productKey?: string;
+  publicLicenseId?: string;
+  unlocked: true;
+  unlockedAt: string;
+};
+
 function hasLocalUnlock() {
   try {
     const storedValue = window.localStorage.getItem(COMPLETE_UNLOCK_KEY);
@@ -27,14 +45,46 @@ function hasLocalUnlock() {
   }
 }
 
-function storeLocalUnlock() {
+function isBrowserUnlockPayload(value: unknown): value is BrowserUnlockPayload {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const payload = value as Partial<BrowserUnlockPayload>;
+
+  return (
+    payload.unlocked === true &&
+    typeof payload.licenseId === "string" &&
+    typeof payload.publicLicenseId === "string" &&
+    typeof payload.productKey === "string" &&
+    typeof payload.unlockedAt === "string" &&
+    typeof payload.lastVerifiedAt === "string"
+  );
+}
+
+function buildStoredUnlockPayload(unlock: unknown): StoredUnlockPayload {
+  if (isBrowserUnlockPayload(unlock)) {
+    return {
+      unlocked: true,
+      licenseId: unlock.licenseId,
+      publicLicenseId: unlock.publicLicenseId,
+      productKey: unlock.productKey,
+      unlockedAt: unlock.unlockedAt,
+      lastVerifiedAt: unlock.lastVerifiedAt
+    };
+  }
+
+  return {
+    unlocked: true,
+    unlockedAt: new Date().toISOString()
+  };
+}
+
+function storeLocalUnlock(unlock: unknown) {
   try {
     window.localStorage.setItem(
       COMPLETE_UNLOCK_KEY,
-      JSON.stringify({
-        unlocked: true,
-        unlockedAt: new Date().toISOString()
-      })
+      JSON.stringify(buildStoredUnlockPayload(unlock))
     );
 
     return true;
@@ -83,7 +133,7 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
       const result = await validateUnlockCode(formData);
 
       if (result.success) {
-        const didStoreUnlock = storeLocalUnlock();
+        const didStoreUnlock = storeLocalUnlock(result.unlock);
 
         setIsUnlocked(true);
         setMessage({
