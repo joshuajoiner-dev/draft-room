@@ -258,6 +258,20 @@ Required rules:
 
 `public_license_id` is not secret and must never grant access by itself.
 
+### Commerce RLS Principle
+
+All new commerce-related database tables must default to least-privilege RLS policies. Existing gameplay tables may be reviewed and hardened in a future dedicated security sprint, but `licenses`, `license_events`, `webhook_events`, recovery flows, and future organization licensing tables should be restrictive from day one.
+
+Commerce tables must not inherit the current permissive gameplay-table RLS pattern:
+
+- `licenses` must not be publicly selectable, insertable, updatable, or deletable.
+- `webhook_events` and `license_events` must be server-only.
+- License validation must happen through server-side actions or API routes.
+- Supabase service role access must remain server-only.
+- Browser/client code must never access commerce tables directly.
+- Existing RLS advisor warnings on gameplay tables are acknowledged but out of scope for Sprint 009B.
+- A future security hardening sprint should review gameplay table RLS separately.
+
 ## Future Organization and Seat Hierarchy
 
 Do not implement organization seats in Sprint 009B.
