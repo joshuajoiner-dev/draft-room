@@ -14,6 +14,7 @@ type SendUnlockCodeEmailSuccess = {
 };
 
 type SendUnlockCodeEmailFailure = {
+  diagnostics: PostmarkEmailFailureDiagnostics;
   ok: false;
   error: string;
 };
@@ -26,6 +27,15 @@ type PostmarkSendResponse = {
   ErrorCode?: number;
   Message?: string;
   MessageID?: string;
+  [key: string]: unknown;
+};
+
+type PostmarkEmailFailureDiagnostics = {
+  errorCode?: number;
+  message?: string;
+  provider: "postmark";
+  responseBody?: Record<string, unknown>;
+  statusCode?: number;
 };
 
 const POSTMARK_SEND_ENDPOINT = "https://api.postmarkapp.com/email";
@@ -46,6 +56,56 @@ function sanitizeEmailError(error: unknown): string {
   }
 
   return "Could not send unlock-code email.";
+}
+
+function sanitizeDiagnosticText(value: unknown): string | undefined {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  return value.replace(/[\r\n]+/g, " ").slice(0, 500);
+}
+
+function sanitizePostmarkResponseBody(
+  responseBody: PostmarkSendResponse,
+): Record<string, unknown> | undefined {
+  const safeBody: Record<string, unknown> = {};
+
+  if (typeof responseBody.ErrorCode === "number") {
+    safeBody.ErrorCode = responseBody.ErrorCode;
+  }
+
+  const message = sanitizeDiagnosticText(responseBody.Message);
+
+  if (message) {
+    safeBody.Message = message;
+  }
+
+  return Object.keys(safeBody).length > 0 ? safeBody : undefined;
+}
+
+function buildPostmarkFailureDiagnostics(input: {
+  responseBody: PostmarkSendResponse;
+  statusCode: number;
+}): PostmarkEmailFailureDiagnostics {
+  const message = sanitizeDiagnosticText(input.responseBody.Message);
+  const responseBody = sanitizePostmarkResponseBody(input.responseBody);
+
+  return {
+    provider: "postmark",
+    statusCode: input.statusCode,
+    ...(typeof input.responseBody.ErrorCode === "number"
+      ? { errorCode: input.responseBody.ErrorCode }
+      : {}),
+    ...(message ? { message } : {}),
+    ...(responseBody ? { responseBody } : {}),
+  };
+}
+
+function buildGenericFailureDiagnostics(): PostmarkEmailFailureDiagnostics {
+  return {
+    provider: "postmark",
+  };
 }
 
 function buildUnlockCodeEmailText(input: SendUnlockCodeEmailInput, appUrl: string): string {
@@ -87,6 +147,7 @@ export async function sendUnlockCodeEmail(
 
     if (!config.commerceEnabled) {
       return {
+        diagnostics: buildGenericFailureDiagnostics(),
         ok: false,
         error: "Commerce email is disabled.",
       };
@@ -113,6 +174,10 @@ export async function sendUnlockCodeEmail(
 
     if (!response.ok || responseBody.ErrorCode) {
       return {
+        diagnostics: buildPostmarkFailureDiagnostics({
+          responseBody,
+          statusCode: response.status,
+        }),
         ok: false,
         error: "Postmark rejected the unlock-code email request.",
       };
@@ -124,6 +189,7 @@ export async function sendUnlockCodeEmail(
     };
   } catch (error) {
     return {
+      diagnostics: buildGenericFailureDiagnostics(),
       ok: false,
       error: sanitizeEmailError(error),
     };

@@ -341,8 +341,8 @@ export async function createLicenseFromShopifyOrder(
         eventType: "email_failed",
         licenseId: data.id,
         metadata: {
+          ...emailResult.diagnostics,
           error: emailResult.error,
-          provider: "postmark",
         },
       });
 
