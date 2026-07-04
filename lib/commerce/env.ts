@@ -4,7 +4,12 @@ type CommercePublicConfig = {
   upgradeCheckoutUrl: string;
 };
 
-type EnabledCommerceServerConfig = CommercePublicConfig & {
+type CommerceServerBaseConfig = {
+  appUrl: string;
+  commerceEnabled: boolean;
+};
+
+type EnabledCommerceServerConfig = CommerceServerBaseConfig & {
   commerceEnabled: true;
   licenseCodePepper: string;
   postmarkFromEmail: string;
@@ -14,7 +19,7 @@ type EnabledCommerceServerConfig = CommercePublicConfig & {
   supabaseServiceRoleKey: string;
 };
 
-type DisabledCommerceServerConfig = CommercePublicConfig & {
+type DisabledCommerceServerConfig = CommerceServerBaseConfig & {
   commerceEnabled: false;
 };
 
@@ -97,17 +102,21 @@ export function getCommercePublicConfig(): CommercePublicConfig {
 export function getCommerceServerConfig(): CommerceServerConfig {
   assertServerOnly();
 
-  const publicConfig = readPublicConfig();
+  const commerceEnabled = readCommerceEnabled();
+  const serverBaseConfig: CommerceServerBaseConfig = {
+    appUrl: readRequiredEnv(PUBLIC_ENV_KEYS[0]),
+    commerceEnabled,
+  };
 
-  if (!publicConfig.commerceEnabled) {
+  if (!serverBaseConfig.commerceEnabled) {
     return {
-      ...publicConfig,
+      ...serverBaseConfig,
       commerceEnabled: false,
     };
   }
 
   return {
-    ...publicConfig,
+    ...serverBaseConfig,
     commerceEnabled: true,
     licenseCodePepper: readRequiredEnv(SERVER_ENV_KEYS[0]),
     postmarkFromEmail: readRequiredEnv(SERVER_ENV_KEYS[1]),

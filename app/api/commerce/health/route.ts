@@ -5,8 +5,10 @@ export const runtime = "nodejs";
 
 type CommerceHealthResponse = {
   checks: {
+    appUrl: boolean;
     commerceEnabled: boolean;
     licensePepper: boolean;
+    postmarkFromEmail: boolean;
     postmarkToken: boolean;
     shopifySecret: boolean;
     supabase: boolean;
@@ -43,14 +45,15 @@ async function checkSupabase(): Promise<boolean> {
 
 export async function GET() {
   const checks: CommerceHealthResponse["checks"] = {
+    appUrl: hasEnvValue("NEXT_PUBLIC_APP_URL"),
     commerceEnabled: process.env.COMMERCE_ENABLED?.trim().toLowerCase() === "true",
     licensePepper: hasEnvValue("LICENSE_CODE_PEPPER"),
+    postmarkFromEmail: hasEnvValue("POSTMARK_FROM_EMAIL"),
     postmarkToken: hasEnvValue("POSTMARK_SERVER_TOKEN"),
     shopifySecret: hasEnvValue("SHOPIFY_WEBHOOK_SECRET"),
     supabase: await checkSupabase(),
   };
-  const hasAppUrl = hasEnvValue("NEXT_PUBLIC_APP_URL");
-  const allChecksPassed = hasAppUrl && Object.values(checks).every(Boolean);
+  const allChecksPassed = Object.values(checks).every(Boolean);
   const body: CommerceHealthResponse = {
     status: allChecksPassed ? "ok" : "error",
     environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "unknown",
