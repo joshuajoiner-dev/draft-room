@@ -2,6 +2,10 @@ import { createHmac, randomUUID, timingSafeEqual } from "crypto";
 
 import { getCommerceServerConfig } from "./env";
 import { recordWebhookEventOnce } from "./events";
+import {
+  ShopifyLicensePayloadError,
+  createLicenseFromShopifyOrder,
+} from "./licenses";
 import type { ShopifyOrderId } from "./types";
 import { validateShopifyOrderId } from "./validation";
 
@@ -31,7 +35,24 @@ type SafeWebhookMetadata = {
 
 type ShopifyPayloadShape = {
   admin_graphql_api_id?: unknown;
+  billing_address?: unknown;
+  contact_email?: unknown;
+  created_at?: unknown;
+  customer?: unknown;
+  email?: unknown;
   id?: unknown;
+  paid_at?: unknown;
+  processed_at?: unknown;
+};
+
+type ShopifyCustomerShape = {
+  admin_graphql_api_id?: unknown;
+  email?: unknown;
+  id?: unknown;
+};
+
+type ShopifyBillingAddressShape = {
+  email?: unknown;
 };
 
 const SHOPIFY_HMAC_HEADER = "x-shopify-hmac-sha256";
@@ -86,6 +107,14 @@ function isPayloadRecord(payload: unknown): payload is ShopifyPayloadShape {
   return typeof payload === "object" && payload !== null && !Array.isArray(payload);
 }
 
+function isCustomerRecord(value: unknown): value is ShopifyCustomerShape {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isBillingAddressRecord(value: unknown): value is ShopifyBillingAddressShape {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function extractShopifyOrderId(payload: unknown): ShopifyOrderId | null {
   if (!isPayloadRecord(payload)) {
     return null;
@@ -100,6 +129,47 @@ function extractShopifyOrderId(payload: unknown): ShopifyOrderId | null {
   const validation = validateShopifyOrderId(String(rawOrderId));
 
   return validation.ok ? validation.value : null;
+}
+
+function readString(value: unknown): string | null {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  return null;
+}
+
+function buildShopifyOrderLicenseInput(payload: unknown) {
+  if (!isPayloadRecord(payload)) {
+    throw new ShopifyLicensePayloadError("Verified Shopify webhook payload is not an order.");
+  }
+
+  const customer = isCustomerRecord(payload.customer) ? payload.customer : null;
+  const billingAddress = isBillingAddressRecord(payload.billing_address)
+    ? payload.billing_address
+    : null;
+  const shopifyOrderId = readString(payload.admin_graphql_api_id ?? payload.id);
+  const licenseOwnerEmail = readString(payload.email ?? payload.contact_email ?? customer?.email);
+
+  if (!shopifyOrderId) {
+    throw new ShopifyLicensePayloadError("Verified Shopify webhook is missing an order ID.");
+  }
+
+  if (!licenseOwnerEmail) {
+    throw new ShopifyLicensePayloadError("Verified Shopify webhook is missing an email.");
+  }
+
+  return {
+    billingEmail: readString(billingAddress?.email ?? payload.email),
+    licenseOwnerEmail,
+    purchaseDate: readString(payload.paid_at ?? payload.processed_at ?? payload.created_at),
+    shopifyCustomerId: readString(customer?.admin_graphql_api_id ?? customer?.id),
+    shopifyOrderId,
+  };
 }
 
 function buildSafeMetadata(
@@ -256,8 +326,13 @@ export async function handleShopifyWebhook(request: Request): Promise<ShopifyWeb
       };
     }
 
-    logShopifyWebhook("info", "Shopify webhook verified and recorded", {
+    const licenseResult = await createLicenseFromShopifyOrder(
+      buildShopifyOrderLicenseInput(payload),
+    );
+
+    logShopifyWebhook("info", "Shopify webhook verified and license handled", {
       correlationId,
+      licenseCreated: licenseResult.status === "created",
       topic: headers.topic,
     });
 
@@ -269,6 +344,23 @@ export async function handleShopifyWebhook(request: Request): Promise<ShopifyWeb
       status: 200,
     };
   } catch (error) {
+    if (error instanceof ShopifyLicensePayloadError) {
+      logShopifyWebhook("warn", "Verified Shopify webhook could not create a license", {
+        correlationId,
+        errorName: error.name,
+        topic: headers.topic,
+      });
+
+      return {
+        body: {
+          correlationId,
+          error: "Verified webhook payload could not create a license.",
+          ok: false,
+        },
+        status: 400,
+      };
+    }
+
     logShopifyWebhook("error", "Shopify webhook handling failed", {
       correlationId,
       errorName: error instanceof Error ? error.name : "UnknownError",
