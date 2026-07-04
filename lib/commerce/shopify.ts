@@ -332,6 +332,7 @@ export async function handleShopifyWebhook(request: Request): Promise<ShopifyWeb
 
     logShopifyWebhook("info", "Shopify webhook verified and license handled", {
       correlationId,
+      emailStatus: licenseResult.emailStatus,
       licenseCreated: licenseResult.status === "created",
       topic: headers.topic,
     });

@@ -2,6 +2,7 @@ import { createHash, randomBytes } from "crypto";
 import { createClient } from "@supabase/supabase-js";
 
 import { getCommerceServerConfig } from "./env";
+import { sendUnlockCodeEmail } from "./email";
 import { recordLicenseEvent } from "./events";
 import {
   DEFAULT_PRODUCT_KEY,
@@ -35,12 +36,13 @@ type ShopifyOrderLicenseInput = {
 
 type LicenseCreationResult =
   | {
+      emailStatus: "sent" | "failed";
       licenseId: string;
       publicLicenseId: PublicLicenseId;
       status: "created";
-      unlockCode: UnlockCode;
     }
   | {
+      emailStatus: "skipped";
       licenseId: string | null;
       publicLicenseId: PublicLicenseId | null;
       status: "already_exists";
@@ -238,6 +240,7 @@ export async function createLicenseFromShopifyOrder(
   if (existingLicense.licenseId || existingLicense.publicLicenseId) {
     return {
       ...existingLicense,
+      emailStatus: "skipped",
       status: "already_exists",
     };
   }
@@ -284,11 +287,44 @@ export async function createLicenseFromShopifyOrder(
         },
       });
 
+      const emailResult = await sendUnlockCodeEmail({
+        licenseOwnerEmail,
+        publicLicenseId,
+        unlockCode,
+      });
+
+      if (emailResult.ok) {
+        await recordLicenseEvent({
+          eventType: "email_sent",
+          licenseId: data.id,
+          metadata: {
+            messageId: emailResult.messageId,
+            provider: "postmark",
+          },
+        });
+
+        return {
+          emailStatus: "sent",
+          licenseId: data.id,
+          publicLicenseId,
+          status: "created",
+        };
+      }
+
+      await recordLicenseEvent({
+        eventType: "email_failed",
+        licenseId: data.id,
+        metadata: {
+          error: emailResult.error,
+          provider: "postmark",
+        },
+      });
+
       return {
+        emailStatus: "failed",
         licenseId: data.id,
         publicLicenseId,
         status: "created",
-        unlockCode,
       };
     }
 
@@ -298,6 +334,7 @@ export async function createLicenseFromShopifyOrder(
       if (existingLicense.licenseId || existingLicense.publicLicenseId) {
         return {
           ...existingLicense,
+          emailStatus: "skipped",
           status: "already_exists",
         };
       }
