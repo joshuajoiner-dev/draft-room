@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
+import { PresentationSlot } from "@/components/presentation/PresentationSlot";
 import { AdminQuickGuide } from "@/components/room/AdminQuickGuide";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
@@ -78,6 +79,8 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           </aside>
         </div>
 
+        <PresentationSlot placement="leaderboard" />
+
         <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
 
         <RoomPlayerList roomId={room.id} players={players} />
@@ -127,6 +130,8 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
         <Link className="button button-secondary" href={`/room/${room.id}`}>
           View Room
         </Link>
+
+        <PresentationSlot placement="footer" />
       </div>
     </AppFrame>
   );

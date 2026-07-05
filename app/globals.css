@@ -198,6 +198,37 @@ select {
   text-underline-offset: 3px;
 }
 
+.presentation-slot {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.018), rgba(255, 138, 31, 0.028)),
+    rgba(255, 255, 255, 0.012);
+}
+
+.presentation-slot-active {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.presentation-slot-leaderboard,
+.presentation-slot-footer {
+  min-height: clamp(44px, 12vw, 90px);
+}
+
+.presentation-slot-below_qr,
+.presentation-slot-sidebar {
+  width: min(100%, 300px);
+  min-height: clamp(96px, 42vw, 250px);
+  justify-self: center;
+}
+
+.presentation-slot-below_join_link {
+  min-height: 56px;
+}
+
 .manual-timer-header {
   display: flex;
   align-items: baseline;

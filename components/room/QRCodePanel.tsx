@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
+import { PresentationSlot } from "@/components/presentation/PresentationSlot";
 
 type QRCodePanelProps = {
   joinUrl: string;
@@ -84,6 +85,8 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
           </div>
         )}
       </div>
+
+      <PresentationSlot placement="below_qr" />
     </section>
   );
 }
