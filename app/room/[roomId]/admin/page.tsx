@@ -70,14 +70,15 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   return (
     <AppFrame variant="wide">
       <div className="stack">
-        <div className="admin-top-grid">
-          <RoomHeader room={room} />
-
-          <aside className="admin-helper-panel" aria-label="Admin organizer tools">
-            <AdminQuickGuide />
-            <ManualAdminTimer />
-          </aside>
-        </div>
+        <RoomHeader
+          room={room}
+          tools={
+            <aside className="admin-helper-panel" aria-label="Admin organizer tools">
+              <AdminQuickGuide />
+              <ManualAdminTimer />
+            </aside>
+          }
+        />
 
         <DemoPresentation placement="leaderboard" />
 

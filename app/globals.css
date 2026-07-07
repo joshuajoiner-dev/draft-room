@@ -130,7 +130,7 @@ select {
 
 .page-title {
   margin: 0;
-  font-size: clamp(32px, 6vw, 56px);
+  font-size: clamp(30px, 5vw, 54px);
   line-height: 1;
   overflow-wrap: anywhere;
 }
@@ -153,7 +153,9 @@ select {
 
 .room-header {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
+  align-items: start;
   min-width: 0;
 }
 
@@ -161,11 +163,25 @@ select {
   min-width: 0;
 }
 
-.admin-top-grid {
-  display: grid;
-  gap: 16px;
-  align-items: start;
+.room-header-code {
+  width: min(100%, 210px);
+}
+
+.room-header-info {
   min-width: 0;
+  max-width: 100%;
+}
+
+.room-header-info .page-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.room-header-tools {
+  min-width: 0;
+  width: 100%;
 }
 
 .admin-helper-panel {
@@ -322,7 +338,7 @@ select {
 
 .room-code {
   display: inline-grid;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   gap: 8px;
   border: 1px solid rgba(97, 239, 98, 0.26);
@@ -860,17 +876,29 @@ a:focus-visible {
   }
 
   .room-header {
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(168px, 210px) minmax(0, 1fr);
     align-items: center;
+  }
+
+  .room-header-admin {
+    align-items: start;
+  }
+
+  .room-header-admin .room-header-tools {
+    grid-column: 1 / -1;
   }
 }
 
 @media (min-width: 1180px) {
-  .admin-top-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  .room-header-admin {
+    grid-template-columns: minmax(168px, 210px) minmax(0, 1fr) minmax(280px, 320px);
   }
 
-  .admin-helper-panel {
+  .room-header-admin .room-header-tools {
+    grid-column: auto;
+  }
+
+  .room-header-admin .admin-helper-panel {
     grid-template-columns: minmax(0, 1fr);
   }
 }
