@@ -66,6 +66,10 @@ select {
   padding: 20px 16px 56px;
 }
 
+.app-main-wide {
+  width: min(100%, 1120px);
+}
+
 .top-bar {
   display: flex;
   align-items: center;
@@ -128,6 +132,7 @@ select {
   margin: 0;
   font-size: clamp(32px, 6vw, 56px);
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .body-copy {
@@ -149,17 +154,24 @@ select {
 .room-header {
   display: grid;
   gap: 18px;
+  min-width: 0;
+}
+
+.room-header > * {
+  min-width: 0;
 }
 
 .admin-top-grid {
   display: grid;
   gap: 16px;
   align-items: start;
+  min-width: 0;
 }
 
 .admin-helper-panel {
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 
 .admin-quick-guide,
@@ -211,6 +223,7 @@ select {
   display: grid;
   place-items: center;
   color: var(--muted);
+  padding: 8px;
 }
 
 .presentation-slot-leaderboard,
@@ -227,6 +240,61 @@ select {
 
 .presentation-slot-below_join_link {
   min-height: 56px;
+}
+
+.presentation-demo {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  width: 100%;
+  min-height: inherit;
+  align-content: center;
+  gap: 4px;
+  overflow: hidden;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(97, 239, 98, 0.12), transparent 42%),
+    linear-gradient(120deg, rgba(255, 138, 31, 0.18), rgba(17, 17, 17, 0.92)),
+    #121212;
+  padding: 14px 18px;
+}
+
+.presentation-demo::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  bottom: -28px;
+  z-index: -1;
+  width: 112px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(97, 239, 98, 0.22);
+  border-radius: 999px;
+}
+
+.presentation-demo span,
+.presentation-demo em {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.presentation-demo strong {
+  color: var(--text);
+  font-size: clamp(18px, 3.5vw, 28px);
+  line-height: 1.05;
+}
+
+.presentation-demo-below_qr {
+  justify-items: center;
+  text-align: center;
+}
+
+.presentation-demo-below_qr strong {
+  font-size: clamp(18px, 6vw, 24px);
 }
 
 .manual-timer-header {
@@ -255,6 +323,7 @@ select {
 .room-code {
   display: inline-grid;
   width: fit-content;
+  max-width: 100%;
   gap: 8px;
   border: 1px solid rgba(97, 239, 98, 0.26);
   border-radius: 8px;
@@ -276,9 +345,10 @@ select {
 
 .room-code strong {
   color: var(--text);
-  font-size: clamp(46px, 15vw, 84px);
+  font-size: clamp(42px, 10vw, 84px);
   letter-spacing: 0.1em;
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .room-code em {
@@ -795,7 +865,7 @@ a:focus-visible {
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1180px) {
   .admin-top-grid {
     grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
   }

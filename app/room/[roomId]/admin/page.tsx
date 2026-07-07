@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
-import { PresentationSlot } from "@/components/presentation/PresentationSlot";
+import { DemoPresentation } from "@/components/presentation/DemoPresentation";
 import { AdminQuickGuide } from "@/components/room/AdminQuickGuide";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
@@ -68,7 +68,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   const isCaptainDraft = room.team_creation_mode === "captain_draft";
 
   return (
-    <AppFrame>
+    <AppFrame variant="wide">
       <div className="stack">
         <div className="admin-top-grid">
           <RoomHeader room={room} />
@@ -79,7 +79,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           </aside>
         </div>
 
-        <PresentationSlot placement="leaderboard" />
+        <DemoPresentation placement="leaderboard" />
 
         <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
 
@@ -131,7 +131,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           View Room
         </Link>
 
-        <PresentationSlot placement="footer" />
+        <DemoPresentation placement="footer" />
       </div>
     </AppFrame>
   );

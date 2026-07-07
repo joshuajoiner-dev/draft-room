@@ -1,9 +1,16 @@
 import Link from "next/link";
 
-export function AppFrame({ children }: { children: React.ReactNode }) {
+type AppFrameProps = {
+  children: React.ReactNode;
+  variant?: "default" | "wide";
+};
+
+export function AppFrame({ children, variant = "default" }: AppFrameProps) {
+  const mainClassName = variant === "wide" ? "app-main app-main-wide" : "app-main";
+
   return (
     <div className="app-shell">
-      <main className="app-main">
+      <main className={mainClassName}>
         <header className="top-bar">
           <Link className="brand" href="/">
             Draft Room
