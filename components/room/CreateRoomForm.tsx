@@ -1,8 +1,21 @@
+"use client";
+
+import { useFormStatus } from "react-dom";
 import { createRoom } from "@/lib/room/actions";
 
 type CreateRoomFormProps = {
   error?: string;
 };
+
+function CreateRoomButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button className="button" type="submit" disabled={pending}>
+      {pending ? "Creating Teams…" : "Create Teams"}
+    </button>
+  );
+}
 
 export function CreateRoomForm({ error }: CreateRoomFormProps) {
   return (
@@ -19,9 +32,7 @@ export function CreateRoomForm({ error }: CreateRoomFormProps) {
         <input className="input" name="name" placeholder="Friday camp teams" required maxLength={80} />
       </label>
 
-      <button className="button" type="submit">
-        Create Room
-      </button>
+      <CreateRoomButton />
     </form>
   );
 }

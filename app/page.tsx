@@ -15,7 +15,7 @@ export default function HomePage() {
 
           <div>
             <Link className="button" href="/room/new">
-              Create Room
+              Create Teams
             </Link>
           </div>
         </div>
