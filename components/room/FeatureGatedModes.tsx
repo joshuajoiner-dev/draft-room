@@ -7,6 +7,7 @@ import { validateUnlockCode } from "@/lib/room/actions";
 const COMPLETE_UNLOCK_KEY = "draft-room-complete-unlocked";
 // Temporary launch access: flip this off when the first 100-user feedback window ends.
 const FOUNDER_ACCESS_ENABLED = true;
+const FOUNDER_ACCESS_MESSAGE = "All Complete features are currently unlocked while we build our first community.";
 
 type FeatureGatedModesProps = {
   quickRandom: ReactNode;
@@ -121,7 +122,7 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
       setIsUnlocked(true);
       setMessage({
         tone: "success",
-        text: "All Complete features are currently unlocked while we collect early feedback."
+        text: FOUNDER_ACCESS_MESSAGE
       });
       return;
     }
@@ -171,7 +172,7 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
           <h2>{FOUNDER_ACCESS_ENABLED ? "Founder Access" : "Enter Unlock Code"}</h2>
           <p className="muted">
             {FOUNDER_ACCESS_ENABLED
-              ? "All Complete features are currently unlocked while we collect early feedback."
+              ? FOUNDER_ACCESS_MESSAGE
               : "Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more."}
           </p>
         </div>

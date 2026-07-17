@@ -13,6 +13,8 @@
   --danger: #d94a38;
   --scoreboard: #061006;
   --scoreboard-lit: #9cff8f;
+  --arena-blue: #2ec7ff;
+  --arena-pink: #ff4fd8;
 }
 
 * {
@@ -64,7 +66,9 @@ select {
   overflow: hidden;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, rgba(97, 239, 98, 0.09), transparent 28rem),
+    radial-gradient(circle at 52% 0%, rgba(46, 199, 255, 0.12), transparent 25rem),
+    radial-gradient(circle at 82% 12%, rgba(255, 79, 216, 0.07), transparent 18rem),
+    radial-gradient(circle at top, rgba(97, 239, 98, 0.08), transparent 28rem),
     var(--background);
 }
 
@@ -74,13 +78,13 @@ select {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.032;
+  opacity: 0.042;
   background:
-    radial-gradient(circle at 13% 19%, transparent 0 44px, #ffffff 45px 46px, transparent 47px),
-    radial-gradient(circle at 83% 72%, transparent 0 62px, #ffffff 63px 64px, transparent 65px),
-    linear-gradient(90deg, transparent 0 34%, #ffffff 34% 34.4%, transparent 34.4% 66%, #ffffff 66% 66.4%, transparent 66.4%),
+    radial-gradient(circle at 13% 19%, transparent 0 44px, var(--arena-blue) 45px 46px, transparent 47px),
+    radial-gradient(circle at 83% 72%, transparent 0 62px, var(--arena-pink) 63px 64px, transparent 65px),
+    linear-gradient(90deg, transparent 0 34%, var(--accent) 34% 34.4%, transparent 34.4% 66%, var(--arena-blue) 66% 66.4%, transparent 66.4%),
     linear-gradient(35deg, transparent 0 46%, #ffffff 46% 46.5%, transparent 46.5%),
-    linear-gradient(145deg, transparent 0 52%, #ffffff 52% 52.4%, transparent 52.4%),
+    linear-gradient(145deg, transparent 0 52%, var(--output) 52% 52.4%, transparent 52.4%),
     repeating-linear-gradient(0deg, transparent 0 58px, #ffffff 59px 60px, transparent 61px 118px),
     repeating-linear-gradient(90deg, transparent 0 72px, #ffffff 73px 74px, transparent 75px 144px);
   background-size:
@@ -114,6 +118,9 @@ select {
   letter-spacing: 0.24em;
   line-height: 2.2;
   opacity: 0.028;
+  text-shadow:
+    0 0 9px rgba(46, 199, 255, 0.6),
+    0 0 18px rgba(97, 239, 98, 0.34);
   pointer-events: none;
   transform: rotate(-28deg);
 }
@@ -283,15 +290,74 @@ select {
 }
 
 .quick-start-card {
+  position: relative;
+  isolation: isolate;
   display: grid;
   gap: 7px;
   min-height: 78px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.045), transparent 48%),
     rgba(0, 0, 0, 0.18);
   padding: 10px;
+}
+
+.quick-start-card::before,
+.quick-start-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.quick-start-card::before {
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 216, 77, 0.46);
+  border-radius: 8px;
+  box-shadow: 0 0 14px rgba(255, 216, 77, 0.12);
+}
+
+.quick-start-card::after {
+  right: 18px;
+  bottom: 12px;
+  width: 32px;
+  height: 1px;
+  background: rgba(97, 239, 98, 0.52);
+  transform: rotate(-28deg);
+  transform-origin: center;
+}
+
+.quick-start-card[data-icon="roster"]::before {
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 7px),
+    rgba(255, 255, 255, 0.03);
+}
+
+.quick-start-card[data-icon="teams"]::before {
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 8px, rgba(97, 239, 98, 0.36) 9px 10px, transparent 11px),
+    linear-gradient(90deg, transparent 0 48%, rgba(255, 255, 255, 0.3) 48% 52%, transparent 52%);
+}
+
+.quick-start-card[data-icon="invite"]::before {
+  border-color: rgba(46, 199, 255, 0.54);
+  background:
+    linear-gradient(45deg, transparent 0 45%, rgba(46, 199, 255, 0.42) 45% 55%, transparent 55%),
+    radial-gradient(circle at 72% 28%, rgba(46, 199, 255, 0.54) 0 4px, transparent 5px);
+}
+
+.quick-start-card[data-icon="start"]::before {
+  border-color: rgba(255, 79, 216, 0.48);
+  background:
+    linear-gradient(90deg, rgba(255, 79, 216, 0.44) 0 40%, transparent 40%),
+    linear-gradient(35deg, transparent 0 42%, rgba(255, 216, 77, 0.44) 42% 50%, transparent 50%);
 }
 
 .quick-start-card span {
@@ -390,6 +456,28 @@ select {
     radial-gradient(circle at 72% 28%, rgba(97, 239, 98, 0.18), transparent 20%),
     linear-gradient(120deg, rgba(255, 216, 77, 0.2), rgba(12, 22, 14, 0.94)),
     #141810;
+}
+
+.presentation-demo[data-tone="field"] {
+  background:
+    radial-gradient(circle at 18% 34%, rgba(255, 255, 255, 0.24), transparent 18%),
+    radial-gradient(circle at 72% 28%, rgba(97, 239, 98, 0.2), transparent 20%),
+    linear-gradient(120deg, rgba(255, 216, 77, 0.24), rgba(9, 31, 21, 0.96)),
+    #111b10;
+}
+
+.presentation-demo[data-tone="clinic"] {
+  background:
+    radial-gradient(circle at 82% 28%, rgba(46, 199, 255, 0.22), transparent 22%),
+    linear-gradient(120deg, rgba(46, 199, 255, 0.2), rgba(13, 20, 29, 0.96)),
+    #10151d;
+}
+
+.presentation-demo[data-tone="school"] {
+  background:
+    radial-gradient(circle at 80% 72%, rgba(255, 216, 77, 0.18), transparent 24%),
+    linear-gradient(120deg, rgba(255, 79, 216, 0.16), rgba(25, 18, 38, 0.96)),
+    #17111f;
 }
 
 .presentation-demo[data-art="photo"]::before {
@@ -495,13 +583,18 @@ select {
   width: 100%;
   max-width: 100%;
   gap: 8px;
-  border: 1px solid rgba(97, 239, 98, 0.26);
+  border: 1px solid rgba(156, 255, 143, 0.38);
   border-radius: 8px;
-  background: rgba(97, 239, 98, 0.1);
+  background:
+    linear-gradient(180deg, rgba(156, 255, 143, 0.1), transparent),
+    var(--scoreboard);
   color: var(--accent);
   cursor: pointer;
   font: inherit;
   padding: 16px 18px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.72),
+    0 0 24px rgba(97, 239, 98, 0.08);
   text-align: left;
 }
 
@@ -514,11 +607,15 @@ select {
 }
 
 .room-code strong {
-  color: var(--text);
+  color: var(--scoreboard-lit);
+  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: clamp(42px, 10vw, 84px);
   letter-spacing: 0.1em;
   line-height: 1;
   overflow-wrap: anywhere;
+  text-shadow:
+    0 0 6px rgba(156, 255, 143, 0.34),
+    0 0 18px rgba(97, 239, 98, 0.18);
 }
 
 .room-code em {

@@ -15,25 +15,29 @@ const demoCopy: Record<
     art: "photo" | "illustration" | "gradient";
     headline: string;
     note: string;
+    tone: "field" | "clinic" | "school";
   }
 > = {
   leaderboard: {
     eyebrow: "Presented by Community Partner",
     art: "photo",
     headline: "Fuel the Game",
-    note: "Youth sports support"
+    note: "Community Recreation Partner",
+    tone: "field"
   },
   below_qr: {
-    eyebrow: "Official Hydration Partner",
+    eyebrow: "Sports Medicine",
     art: "illustration",
-    headline: "Community Recreation Partner",
-    note: "Summer camp registration"
+    headline: "Train Smart",
+    note: "Hydration Partner",
+    tone: "clinic"
   },
   footer: {
-    eyebrow: "Tournament Sponsor",
+    eyebrow: "School Partner",
     art: "gradient",
-    headline: "Healthy Snack Partner",
-    note: "Community education partner"
+    headline: "Learning Through Play",
+    note: "Summer Registration Open",
+    tone: "school"
   }
 };
 
@@ -46,7 +50,7 @@ export function DemoPresentation({ placement }: DemoPresentationProps) {
 
   return (
     <PresentationSlot active placement={placement}>
-      <div className={`presentation-demo presentation-demo-${placement}`} data-art={copy.art}>
+      <div className={`presentation-demo presentation-demo-${placement}`} data-art={copy.art} data-tone={copy.tone}>
         <span>{copy.eyebrow}</span>
         <strong>{copy.headline}</strong>
         <em>{copy.note}</em>

@@ -1,8 +1,8 @@
 const guideSteps = [
-  { label: "Import Players", mark: "Roster" },
-  { label: "Create Teams", mark: "Teams" },
-  { label: "Invite Players", mark: "Link" },
-  { label: "Begin Activity", mark: "Start" }
+  { icon: "roster", label: "Import Players", mark: "Roster" },
+  { icon: "teams", label: "Create Teams", mark: "Teams" },
+  { icon: "invite", label: "Invite Players", mark: "Link" },
+  { icon: "start", label: "Begin Activity", mark: "Start" }
 ];
 
 export function AdminQuickGuide() {
@@ -11,7 +11,7 @@ export function AdminQuickGuide() {
       <p className="admin-panel-label">Quick Start</p>
       <div className="quick-start-grid">
         {guideSteps.map((step) => (
-          <div className="quick-start-card" key={step.label}>
+          <div className="quick-start-card" data-icon={step.icon} key={step.label}>
             <span aria-hidden="true">{step.mark}</span>
             <strong>{step.label}</strong>
           </div>
