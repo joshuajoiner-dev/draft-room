@@ -12,7 +12,7 @@ Draft Room v1.0 is a live team creation room for classrooms, sports, camps, club
 - Duplicate imported names are skipped.
 - Live room player list updates.
 - Quick Random team creation.
-- Balanced Random team creation with even team sizes.
+- Create Balanced Teams with even team sizes.
 - Captain Draft setup with captains assigned to their own teams.
 - Captain Draft picking by round.
 - Admin override controls for unassign, reassign, and supported undo actions.
@@ -35,7 +35,7 @@ Draft Room v1.0 is a live team creation room for classrooms, sports, camps, club
 - No short custom join URL.
 - No export workflow.
 - No persistent room history page.
-- Balanced Random balances team size only; it does not use skill ratings or categories.
+- Create Balanced Teams balances team size only; it does not use skill ratings or categories.
 - Captain Draft does not enforce captain identity beyond the current room UI.
 
 ## Future Ideas

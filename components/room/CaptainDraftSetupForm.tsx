@@ -62,7 +62,7 @@ export function CaptainDraftSetupForm({ roomId, players, hasCaptainTeams, messag
         <button
           aria-disabled={disabled}
           aria-label={disabled ? "Import at least one player per captain team before saving" : undefined}
-          className="button"
+          className="button button-orange"
           data-testid="save-captain-teams"
           disabled={disabled}
           type="submit"

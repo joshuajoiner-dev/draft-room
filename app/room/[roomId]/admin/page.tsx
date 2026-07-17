@@ -129,7 +129,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
         )}
 
         <Link className="button button-secondary" href={`/room/${room.id}`}>
-          View Room
+          View Teams
         </Link>
 
         <DemoPresentation placement="footer" />

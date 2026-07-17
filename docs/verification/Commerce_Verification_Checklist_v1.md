@@ -127,10 +127,10 @@ Forbidden fields:
 
 ## Existing App Regression Test
 
-- [ ] Create room.
+- [ ] Create Teams.
 - [ ] QR join.
 - [ ] Player list refresh.
-- [ ] Balanced Random.
+- [ ] Create Balanced Teams.
 - [ ] Captain Draft.
 - [ ] Undo Pick.
 - [ ] Print Teams.

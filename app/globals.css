@@ -7,7 +7,10 @@
   --muted: #a3a3a3;
   --accent: #61ef62;
   --upgrade: #ff8a1f;
+  --output: #ffd84d;
   --danger: #d94a38;
+  --scoreboard: #061006;
+  --scoreboard-lit: #9cff8f;
 }
 
 * {
@@ -54,13 +57,48 @@ select {
 }
 
 .app-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, rgba(97, 239, 98, 0.12), transparent 28rem),
+    radial-gradient(circle at top, rgba(97, 239, 98, 0.09), transparent 28rem),
     var(--background);
 }
 
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.026;
+  background:
+    linear-gradient(90deg, transparent 0 46%, #ffffff 46% 47%, transparent 47% 53%, #ffffff 53% 54%, transparent 54%),
+    radial-gradient(circle at 18% 26%, transparent 0 56px, #ffffff 57px 58px, transparent 59px),
+    radial-gradient(circle at 82% 74%, transparent 0 70px, #ffffff 71px 72px, transparent 73px),
+    linear-gradient(35deg, transparent 0 48%, #ffffff 48% 49%, transparent 49%),
+    repeating-linear-gradient(0deg, transparent 0 82px, #ffffff 83px 84px, transparent 85px 166px),
+    repeating-linear-gradient(90deg, transparent 0 96px, #ffffff 97px 98px, transparent 99px 192px);
+  background-size:
+    520px 360px,
+    420px 420px,
+    520px 520px,
+    440px 440px,
+    360px 360px,
+    360px 360px;
+  background-position:
+    4% 5%,
+    8% 16%,
+    88% 78%,
+    78% 14%,
+    0 0,
+    0 0;
+}
+
 .app-main {
+  position: relative;
+  z-index: 1;
   width: min(100%, 980px);
   margin: 0 auto;
   padding: 20px 16px 56px;
@@ -200,6 +238,13 @@ select {
   padding: 14px;
 }
 
+.manual-admin-timer {
+  border-color: rgba(156, 255, 143, 0.28);
+  background:
+    linear-gradient(180deg, rgba(156, 255, 143, 0.08), transparent),
+    var(--scoreboard);
+}
+
 .admin-panel-label {
   margin: 0;
   color: var(--upgrade);
@@ -228,10 +273,10 @@ select {
 
 .presentation-slot {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.055);
-  border-radius: 10px;
+  border: 1px solid rgba(255, 216, 77, 0.18);
+  border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.018), rgba(255, 138, 31, 0.028)),
+    linear-gradient(90deg, rgba(255, 216, 77, 0.035), transparent 42%),
     rgba(255, 255, 255, 0.012);
 }
 
@@ -269,22 +314,24 @@ select {
   overflow: hidden;
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(97, 239, 98, 0.12), transparent 42%),
-    linear-gradient(120deg, rgba(255, 138, 31, 0.18), rgba(17, 17, 17, 0.92)),
-    #121212;
+    linear-gradient(90deg, rgba(255, 216, 77, 0.16), transparent 34%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.05), rgba(17, 17, 17, 0.94)),
+    #15120a;
   padding: 14px 18px;
 }
 
 .presentation-demo::after {
   content: "";
   position: absolute;
-  right: 14px;
-  bottom: -28px;
+  right: 18px;
+  bottom: 10px;
   z-index: -1;
-  width: 112px;
-  aspect-ratio: 1;
-  border: 1px solid rgba(97, 239, 98, 0.22);
-  border-radius: 999px;
+  width: 150px;
+  height: 54px;
+  border: 1px solid rgba(255, 216, 77, 0.2);
+  border-left: 0;
+  border-right: 0;
+  transform: skewX(-16deg);
 }
 
 .presentation-demo span,
@@ -321,9 +368,21 @@ select {
 }
 
 .manual-timer-header strong {
-  color: var(--text);
-  font-size: 24px;
   line-height: 1;
+}
+
+.digital-time {
+  display: inline-block;
+  color: var(--scoreboard-lit);
+  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: clamp(24px, 7vw, 42px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+  text-shadow:
+    0 0 7px rgba(156, 255, 143, 0.42),
+    0 0 18px rgba(97, 239, 98, 0.22);
 }
 
 .manual-timer-input {
@@ -449,6 +508,11 @@ a:focus-visible {
 .button-orange {
   background: var(--upgrade);
   color: #180b00;
+}
+
+.button-output {
+  background: var(--output);
+  color: #151000;
 }
 
 .button-danger {
@@ -753,9 +817,12 @@ a:focus-visible {
   aspect-ratio: 3 / 2;
   align-content: space-between;
   gap: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(156, 255, 143, 0.34);
   border-radius: 8px;
-  background: var(--surface-soft);
+  background:
+    linear-gradient(180deg, rgba(156, 255, 143, 0.08), transparent),
+    var(--scoreboard);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.72);
   padding: 14px;
 }
 
@@ -769,7 +836,6 @@ a:focus-visible {
 }
 
 .countdown-timer strong {
-  font-size: 36px;
   line-height: 1;
 }
 

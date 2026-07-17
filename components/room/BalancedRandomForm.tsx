@@ -13,14 +13,14 @@ export function BalancedRandomForm({ roomId, playerCount, hasTeams, message }: B
   return (
     <form action={action} className="card form" data-testid="balanced-random-form">
       <div className="stack-tight">
-        <h2>⚖️ Balanced Random</h2>
-        <p className="muted">Randomly distribute all current players into even team sizes.</p>
+        <h2>Create Balanced Teams</h2>
+        <p className="muted">Create even teams from the current player pool.</p>
       </div>
 
       {message ? <div className="success">{message}</div> : null}
 
       <label className="label">
-        Balanced Random teams
+        Balanced teams
         <input
           className="input"
           data-testid="balanced-random-team-count"
@@ -35,7 +35,7 @@ export function BalancedRandomForm({ roomId, playerCount, hasTeams, message }: B
 
       <button
         aria-disabled={!playerCount}
-        aria-label={!playerCount ? "Import players before generating balanced random teams" : undefined}
+        aria-label={!playerCount ? "Import players before creating balanced teams" : undefined}
         className="button"
         data-testid="balanced-random-submit"
         type="submit"

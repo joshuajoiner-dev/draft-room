@@ -66,7 +66,7 @@ Manual checklist:
 - Join as a player.
 - Import multiple players as admin.
 - Generate Quick Random teams.
-- Generate Balanced Random teams.
+- Create Balanced Teams.
 - Set up and begin Captain Draft.
 - Make a Captain Draft pick.
 - Use admin override controls.

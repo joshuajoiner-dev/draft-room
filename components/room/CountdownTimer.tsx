@@ -7,10 +7,11 @@ type CountdownTimerProps = {
 };
 
 function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
 
-  return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+  return [hours, minutes, remainingSeconds].map((value) => String(value).padStart(2, "0")).join(":");
 }
 
 export function CountdownTimer({ initialSeconds = 60 }: CountdownTimerProps) {
@@ -35,7 +36,9 @@ export function CountdownTimer({ initialSeconds = 60 }: CountdownTimerProps) {
     <section className="countdown-timer" aria-label="Pick countdown timer">
       <div>
         <p className="countdown-label">Pick Timer</p>
-        <strong aria-live="polite">{formatTime(secondsLeft)}</strong>
+        <strong aria-live="polite" className="digital-time">
+          {formatTime(secondsLeft)}
+        </strong>
       </div>
 
       <div className="countdown-actions">

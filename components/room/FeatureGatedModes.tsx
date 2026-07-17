@@ -158,7 +158,9 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
       <section className="card form" data-testid="complete-unlock">
         <div className="stack-tight">
           <h2>Enter Unlock Code</h2>
-          <p className="muted">Unlock Draft Room Complete on this browser.</p>
+          <p className="muted">
+            Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more.
+          </p>
         </div>
 
         {message ? <div className={message.tone === "success" ? "success" : "error"}>{message.text}</div> : null}
@@ -187,7 +189,7 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
       {!isUnlocked ? (
         <LockedModeCard
           title="⚡ Quick Random"
-          description="Choose a team count and randomly assign all current players."
+          description="Assign players completely at random for the fastest possible team split."
         />
       ) : null}
 

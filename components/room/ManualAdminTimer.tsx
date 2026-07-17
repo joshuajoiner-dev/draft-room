@@ -82,7 +82,9 @@ export function ManualAdminTimer() {
     <section className="manual-admin-timer" aria-label="Manual admin timer">
       <div className="manual-timer-header">
         <p className="admin-panel-label">Manual Timer</p>
-        <strong aria-live="polite">{formatSeconds(secondsLeft)}</strong>
+        <strong aria-live="polite" className="digital-time">
+          {formatSeconds(secondsLeft)}
+        </strong>
       </div>
 
       <label className="sr-only" htmlFor="manual-admin-timer-input">

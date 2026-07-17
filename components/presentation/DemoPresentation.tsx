@@ -18,18 +18,18 @@ const demoCopy: Record<
 > = {
   leaderboard: {
     eyebrow: "Presented by Community Partner",
-    headline: "Fuel the game",
-    note: "Local recreation support"
+    headline: "Community Sports",
+    note: "Local recreation partner"
   },
   below_qr: {
     eyebrow: "Official Hydration Partner",
-    headline: "Thanks to our partners",
-    note: "Venue presentation"
+    headline: "Keep the room moving",
+    note: "Practice night support"
   },
   footer: {
-    eyebrow: "Tournament Partner",
-    headline: "Participation begins here",
-    note: "Community sports night"
+    eyebrow: "Tournament Sponsor",
+    headline: "Healthy Snack Partner",
+    note: "Presented for this event"
   }
 };
 
