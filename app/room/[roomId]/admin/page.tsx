@@ -42,6 +42,18 @@ function getOrigin() {
 
 const upgradeCheckoutUrl = process.env.NEXT_PUBLIC_UPGRADE_CHECKOUT_URL ?? "#complete-unlock";
 
+const formatLabels = {
+  balanced_random: "Balanced",
+  captain_draft: "Captain Draft",
+  random_teams: "Quick Random"
+} as const;
+
+const statusLabels = {
+  drafting: "Drafting",
+  finalized: "Final",
+  setup: "Open"
+} as const;
+
 export default async function AdminPage({ params, searchParams }: AdminPageProps) {
   const { room, players, teams, assignments } = await getRoomState(params.roomId);
   const joinUrl = `${getOrigin()}/room/${room.id}/join`;
@@ -71,51 +83,83 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   return (
     <AppFrame variant="wide">
       <div className="stack">
-        <RoomHeader
-          room={room}
-          tools={
-            <aside className="admin-helper-panel" aria-label="Admin organizer tools">
-              <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length}>
-                <ManualAdminTimer />
-              </LiveEventPanel>
-              <AdminQuickGuide />
-            </aside>
-          }
-        />
+        <div className="event-control-layout">
+          <aside className="event-control-column event-control-left" aria-label="Room command rail">
+            <RoomHeader room={room} />
 
-        <DemoPresentation placement="leaderboard" />
+            <section className="card compact-panel">
+              <p className="admin-panel-label">Room Details</p>
+              <dl className="detail-list">
+                <div>
+                  <dt>Event</dt>
+                  <dd>{room.name}</dd>
+                </div>
+                <div>
+                  <dt>Players</dt>
+                  <dd>{players.length}</dd>
+                </div>
+                <div>
+                  <dt>Teams</dt>
+                  <dd>{teams.length}</dd>
+                </div>
+              </dl>
+            </section>
 
-        <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} upgradeHref={upgradeCheckoutUrl} />
+            <section className="card compact-panel">
+              <p className="admin-panel-label">Event Status</p>
+              <dl className="detail-list">
+                <div>
+                  <dt>Status</dt>
+                  <dd>{statusLabels[room.status]}</dd>
+                </div>
+                <div>
+                  <dt>Format</dt>
+                  <dd>{room.team_creation_mode ? formatLabels[room.team_creation_mode] : "Not Set"}</dd>
+                </div>
+              </dl>
+            </section>
+          </aside>
 
-        <RoomPlayerList roomId={room.id} players={players} />
-
-        <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
-
-        <BalancedRandomForm
-          roomId={room.id}
-          playerCount={players.length}
-          hasTeams={teams.length > 0}
-          message={balancedRandomMessage}
-        />
-
-        <FeatureGatedModes
-          quickRandom={
-            <RandomTeamsForm
+          <main className="event-control-column event-control-center" aria-label="Primary event controls">
+            <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length} />
+            <AdminQuickGuide />
+            <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} upgradeHref={upgradeCheckoutUrl} />
+            <RoomPlayerList roomId={room.id} players={players} />
+            <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
+            <BalancedRandomForm
               roomId={room.id}
               playerCount={players.length}
               hasTeams={teams.length > 0}
-              message={randomTeamsMessage}
+              message={balancedRandomMessage}
             />
-          }
-          captainDraft={
-            <CaptainDraftSetupForm
-              roomId={room.id}
-              players={players}
-              hasCaptainTeams={isCaptainDraft && teams.length > 0}
-              message={captainDraftMessage}
-            />
-          }
-        />
+          </main>
+
+          <aside className="event-control-column event-control-right" aria-label="Complete tools and event timer">
+            <ManualAdminTimer />
+            <div className="complete-features-stack">
+              <p className="admin-panel-label">Complete Features</p>
+              <FeatureGatedModes
+                quickRandom={
+                  <RandomTeamsForm
+                    roomId={room.id}
+                    playerCount={players.length}
+                    hasTeams={teams.length > 0}
+                    message={randomTeamsMessage}
+                  />
+                }
+                captainDraft={
+                  <CaptainDraftSetupForm
+                    roomId={room.id}
+                    players={players}
+                    hasCaptainTeams={isCaptainDraft && teams.length > 0}
+                    message={captainDraftMessage}
+                  />
+                }
+              />
+            </div>
+            <DemoPresentation placement="leaderboard" />
+          </aside>
+        </div>
 
         {isCaptainDraft ? (
           <CaptainDraftSummary roomId={room.id} teams={teams} players={players} />
