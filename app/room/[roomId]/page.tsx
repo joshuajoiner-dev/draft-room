@@ -32,7 +32,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
         <DemoPresentation placement="leaderboard" />
 
-        <QRCodePanel joinUrl={joinUrl} />
+        <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
 
         <RoomPlayerList roomId={room.id} players={players} />
 

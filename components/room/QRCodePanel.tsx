@@ -7,22 +7,13 @@ import { DemoPresentation } from "@/components/presentation/DemoPresentation";
 
 type QRCodePanelProps = {
   joinUrl: string;
+  roomCode: string;
   upgradeHref?: string;
 };
 
-function shortenUrl(url: string) {
-  try {
-    const parsedUrl = new URL(url);
-    return `${parsedUrl.host}${parsedUrl.pathname}`;
-  } catch {
-    return url;
-  }
-}
-
-export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
+export function QRCodePanel({ joinUrl, roomCode, upgradeHref }: QRCodePanelProps) {
   const [src, setSrc] = useState("");
   const [copyStatus, setCopyStatus] = useState("");
-  const displayUrl = shortenUrl(joinUrl);
 
   useEffect(() => {
     let mounted = true;
@@ -55,17 +46,20 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
     <section className="card stack qr-card">
       <div className="stack-tight">
         <h2>Join link</h2>
-        <p className="muted">Players can scan or open this link.</p>
+        <p className="muted">Players can scan the QR or use the room code.</p>
       </div>
 
       <div className="join-link-row">
         <div className="join-link-panel">
-          <span>Current room link</span>
-          <div className="link-box" title={joinUrl}>{displayUrl}</div>
+          <span>Room Code</span>
+          <strong>{roomCode}</strong>
         </div>
         <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
           Copy Link
         </button>
+        <a className="button button-secondary share-qr-button" href="#room-qr-code">
+          Share QR
+        </a>
         {upgradeHref ? (
           <a className="button button-orange" href={upgradeHref}>
             Upgrade Now
@@ -79,7 +73,7 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
         </p>
       ) : null}
 
-      <div className="qr-box" aria-live="polite">
+      <div className="qr-box" id="room-qr-code" aria-live="polite">
         {src ? (
           <Image alt="Room join QR code" height={252} priority src={src} unoptimized width={252} />
         ) : (

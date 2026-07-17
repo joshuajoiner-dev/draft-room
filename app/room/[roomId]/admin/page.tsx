@@ -8,6 +8,7 @@ import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
 import { FeatureGatedModes } from "@/components/room/FeatureGatedModes";
 import { GeneratedTeams } from "@/components/room/GeneratedTeams";
+import { LiveEventPanel } from "@/components/room/LiveEventPanel";
 import { ManualAdminTimer } from "@/components/room/ManualAdminTimer";
 import { PlayerNameForm } from "@/components/room/PlayerNameForm";
 import { QRCodePanel } from "@/components/room/QRCodePanel";
@@ -74,15 +75,17 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           room={room}
           tools={
             <aside className="admin-helper-panel" aria-label="Admin organizer tools">
+              <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length}>
+                <ManualAdminTimer />
+              </LiveEventPanel>
               <AdminQuickGuide />
-              <ManualAdminTimer />
             </aside>
           }
         />
 
         <DemoPresentation placement="leaderboard" />
 
-        <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
+        <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} upgradeHref={upgradeCheckoutUrl} />
 
         <RoomPlayerList roomId={room.id} players={players} />
 

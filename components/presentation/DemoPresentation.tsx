@@ -19,24 +19,24 @@ const demoCopy: Record<
   }
 > = {
   leaderboard: {
-    eyebrow: "Presented by Community Partner",
+    eyebrow: "Community Recreation",
     art: "photo",
     headline: "Fuel the Game",
-    note: "Community Recreation Partner",
+    note: "Live Event Partner",
     tone: "field"
   },
   below_qr: {
     eyebrow: "Sports Medicine",
     art: "illustration",
-    headline: "Train Smart",
+    headline: "Hydration Partner",
     note: "Hydration Partner",
     tone: "clinic"
   },
   footer: {
-    eyebrow: "School Partner",
+    eyebrow: "After School Programs",
     art: "gradient",
-    headline: "Learning Through Play",
-    note: "Summer Registration Open",
+    headline: "Healthy Snacks",
+    note: "Fitness Center",
     tone: "school"
   }
 };

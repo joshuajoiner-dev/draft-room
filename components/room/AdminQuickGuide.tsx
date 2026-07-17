@@ -1,8 +1,8 @@
 const guideSteps = [
-  { icon: "roster", label: "Import Players", mark: "Roster" },
-  { icon: "teams", label: "Create Teams", mark: "Teams" },
-  { icon: "invite", label: "Invite Players", mark: "Link" },
-  { icon: "start", label: "Begin Activity", mark: "Start" }
+  { icon: "roster", label: "Import", mark: "Roster" },
+  { icon: "teams", label: "Create", mark: "Teams" },
+  { icon: "invite", label: "Invite", mark: "Link" },
+  { icon: "start", label: "Play", mark: "Start" }
 ];
 
 export function AdminQuickGuide() {
