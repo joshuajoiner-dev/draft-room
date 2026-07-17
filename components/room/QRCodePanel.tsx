@@ -59,7 +59,10 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
       </div>
 
       <div className="join-link-row">
-        <div className="link-box" title={joinUrl}>{displayUrl}</div>
+        <div className="join-link-panel">
+          <span>Current room link</span>
+          <div className="link-box" title={joinUrl}>{displayUrl}</div>
+        </div>
         <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
           Copy Link
         </button>

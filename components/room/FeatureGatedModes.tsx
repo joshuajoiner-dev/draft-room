@@ -5,6 +5,8 @@ import { useEffect, useState, useTransition } from "react";
 import { validateUnlockCode } from "@/lib/room/actions";
 
 const COMPLETE_UNLOCK_KEY = "draft-room-complete-unlocked";
+// Temporary launch access: flip this off when the first 100-user feedback window ends.
+const FOUNDER_ACCESS_ENABLED = true;
 
 type FeatureGatedModesProps = {
   quickRandom: ReactNode;
@@ -110,11 +112,20 @@ function LockedModeCard({ title, description }: { title: string; description: st
 }
 
 export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedModesProps) {
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(FOUNDER_ACCESS_ENABLED);
   const [message, setMessage] = useState<UnlockMessage | null>(null);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
+    if (FOUNDER_ACCESS_ENABLED) {
+      setIsUnlocked(true);
+      setMessage({
+        tone: "success",
+        text: "All Complete features are currently unlocked while we collect early feedback."
+      });
+      return;
+    }
+
     if (hasLocalUnlock()) {
       setIsUnlocked(true);
       setMessage({
@@ -157,9 +168,11 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
     <>
       <section className="card form" data-testid="complete-unlock">
         <div className="stack-tight">
-          <h2>Enter Unlock Code</h2>
+          <h2>{FOUNDER_ACCESS_ENABLED ? "Founder Access" : "Enter Unlock Code"}</h2>
           <p className="muted">
-            Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more.
+            {FOUNDER_ACCESS_ENABLED
+              ? "All Complete features are currently unlocked while we collect early feedback."
+              : "Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more."}
           </p>
         </div>
 
