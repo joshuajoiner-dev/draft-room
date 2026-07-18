@@ -1,140 +1,159 @@
 # Product North Star
 
-This document describes why JoinDraftPick exists.
+This document describes the enduring purpose of JoinDraftPick.
 
-It is founder philosophy — not marketing copy. It should change rarely. When engineering tradeoffs arise, return here.
+It explains *why* the product exists — not *how* it currently works. It should change rarely. When engineering tradeoffs arise, return here.
 
-For sprint-level build plans, see [ROADMAP.md](../../ROADMAP.md). For enduring vision language, see [VISION_2027.md](../VISION_2027.md).
+---
+
+## Purpose
+
+JoinDraftPick exists to remove organizational friction so groups spend less time organizing and more time participating.
+
+Technology is not the destination. Participation is.
+
+Every engineering decision should ultimately support this principle.
 
 ---
 
 ## Mission
 
-Help people spend less time organizing and more time participating.
+Create the fastest, fairest, and most enjoyable way for groups to move from gathering to playing.
+
+Reduce waiting. Reduce uncertainty. Reduce administrative burden.
+
+Increase participation. Increase momentum. Increase confidence.
 
 ---
 
 ## Vision
 
-JoinDraftPick becomes the easiest way in the world to organize people into activities.
+JoinDraftPick should become the trusted operating system for informal group organization.
 
-Not because it has the most features. Because it removes the most friction.
+Whether the setting is a PE class, recess, athletics, recreation, camps, youth programs, corporate team-building, or community events, the experience should always feel immediate, organized, and welcoming.
 
-Participation begins sooner. Communities spend more time together. That is success.
+The product succeeds when organizers barely think about the software because everyone is already playing.
 
----
-
-## Audience
-
-JoinDraftPick serves people who organize group activities and lose time picking teams:
-
-- **Teachers** dividing classes for projects, labs, or games.
-- **Coaches** running practice groups, scrimmages, or tryouts.
-- **Recreation leaders** managing camps, leagues, and community programs.
-- **Event organizers** sorting participants for tournaments, clubs, and gatherings.
-
-Players are participants, not customers. They join by name. They do not need accounts, licenses, or payment.
-
-Organizers are the customer. One organizer, one device, one minute.
+For enduring company vision language, see [VISION_2027.md](../VISION_2027.md).
 
 ---
 
-## Long-Term Direction
+## Product Promise
 
-JoinDraftPick will grow through deliberate, measured expansion:
+**More Play. Less Waiting.**
 
-1. **Stronger rooms** — faster setup, clearer flows, better team tools.
-2. **Honest measurement** — time-to-participation, format usage, device context.
-3. **Tasteful sponsorship** — venue-style revenue that supports participation.
-4. **Organization licensing** — district and league tools when real demand exists.
-5. **Tournament mode** — brackets, schedules, and standings as a natural venue extension.
+This is not merely a marketing slogan. It is the repository's primary decision-making filter.
 
-Growth follows listening, not speculation. See Sprint 013 (Listen First) in [ROADMAP.md](../../ROADMAP.md).
+Whenever multiple implementation options exist, prefer the one that reduces friction and helps people begin participating sooner.
 
-We will not become a feature marketplace, an ad network, or enterprise software dressed in sports colors.
+The founding promise remains: **One Organizer. One Device. One Minute.** See [FOUNDING.md](../FOUNDING.md).
 
 ---
 
-## What Problems We Solve
+## Success Metric
 
-- **Team selection takes too long.** Manual picking, awkward counting, and improvised methods waste activity time.
-- **Organizers need one device, not a system.** A phone or laptop should be enough to run the entire room.
-- **Players need zero setup.** Join by name. See teams. Participate.
-- **Groups need fairness without complexity.** Balanced teams, random splits, and captain drafts cover most real-world needs.
-- **Recovery should be simple.** Complete unlock works through email when a browser is cleared or a device changes.
+The goal is **not** maximizing time inside the application.
 
----
+Success is measured by:
 
-## What Problems We Intentionally Do Not Solve
+- How quickly a room can be created
+- How quickly participants can join
+- How quickly teams can be formed
+- How confidently organizers can run an event
+- How quickly everyone begins participating
 
-- **Player identity and authentication.** Players are names in a room, not user accounts.
-- **Skill ratings and advanced balancing.** Balanced Teams equalizes team size, not player ability.
-- **League management platforms.** We organize teams for an activity — we do not run seasons, standings, or registration.
-- **Social networks or community feeds.** The product is a room, not a platform.
-- **Advertising networks.** Sponsorship is venue signage, not programmatic ads.
-- **Enterprise admin complexity in v1.** Organization portals and seat management are future work, reserved in architecture but not shipped prematurely.
-
-Knowing what we refuse to build is as important as knowing what we build.
+Time spent inside the software should decrease as the product improves.
 
 ---
 
-## Principles Over Features
+## Design Philosophy
 
-Features are tools. Principles are constraints.
+The interface should feel like entering a real future gym.
 
-Every feature proposal should pass these filters before engineering begins:
+Not science fiction. Not enterprise software. Not a spreadsheet. Not a cluttered administrative dashboard.
 
-| Principle | Question |
+Technology should quietly support the event rather than become the event.
+
+Everything should communicate movement, anticipation, readiness, confidence, fairness, and clarity.
+
+For Arena-specific design direction, see [docs/design/ARENA_FUTURE_GYM_DIRECTION.md](../design/ARENA_FUTURE_GYM_DIRECTION.md).
+
+---
+
+## Engineering Philosophy
+
+Every feature should answer three questions:
+
+1. Does it reduce friction?
+2. Does it improve organizer confidence?
+3. Does it help people begin participating sooner?
+
+If the answer to any of these is no, reconsider the feature.
+
+Small, durable improvements are preferred over large, flashy additions.
+
+For agent operating rules and workflow protection, see [AGENTS.md](../../AGENTS.md).
+
+---
+
+## What We Build
+
+JoinDraftPick focuses on lightweight event organization.
+
+The current product family includes Quick Random, Balanced Random, and Captain Draft. Future experiences should remain consistent with the same philosophy of reducing friction and increasing participation.
+
+The repository should evolve naturally while preserving a coherent product identity. Planned initiatives live in [ROADMAP.md](../../ROADMAP.md).
+
+---
+
+## What We Do Not Build
+
+JoinDraftPick is intentionally **not**:
+
+- A full league-management platform
+- A school information system
+- A learning management system
+- An enterprise sports administration suite
+- A social network
+- A communication platform
+- A statistics warehouse
+
+We intentionally solve one problem exceptionally well instead of solving many problems poorly.
+
+---
+
+## Long-Term Principle
+
+The product should remain understandable years from now.
+
+Features may evolve. Technology will evolve. Design trends will evolve. The underlying philosophy should not.
+
+Durable principles outlive fashionable interfaces.
+
+---
+
+## Relationship to Other Repository Documents
+
+This document defines **why** the product exists.
+
+Other documents explain:
+
+| Document | Scope |
 | --- | --- |
-| Participation speed | Does this help people begin playing sooner? |
-| Simplicity | Can an organizer use this on first encounter without instructions? |
-| One device | Does this work from a single phone or laptop? |
-| Calm confidence | Does this feel like a ready venue, not a product demo? |
-| Software disappears | Does the activity remain the focus? |
+| [VISION_2027.md](../VISION_2027.md) | Enduring company vision and design principles |
+| [ROADMAP.md](../../ROADMAP.md) | Planned initiatives and sprint sequence |
+| [SPONSORSHIP_FRAMEWORK.md](../SPONSORSHIP_FRAMEWORK.md) | Sponsorship strategy and placement rules |
+| [AGENTS.md](../../AGENTS.md) | Agent operating instructions and engineering rules |
+| [docs/engineering/REPOSITORY_WORKFLOW.md](../engineering/REPOSITORY_WORKFLOW.md) | Engineering implementation standards |
 
-If a feature adds capability but slows participation, it fails — regardless of how impressive it looks.
-
-We ship small. We measure honestly. We improve continuously. Real users teach us what matters.
+This document should remain stable while those documents evolve.
 
 ---
 
-## More Play. Less Waiting.
+## Closing Statement
 
-This is the internal shorthand for everything above.
+Every commit should move the product a little closer to its north star.
 
-Organizers come to JoinDraftPick because an activity is about to begin. Students are waiting. Practice time is limited. A tournament bracket needs to start. The clock is always running somewhere.
+Not by adding complexity. By removing friction.
 
-Our success metric is **not** time spent inside the app.
-
-Our success metric is **how quickly people begin participating**.
-
-Every screen, every default, every engineering decision should reduce the gap between "I need teams" and "teams are ready."
-
-- A homepage visitor should understand what JoinDraftPick does within five seconds.
-- A first-time organizer should create teams in under one minute.
-- A player should join and see their name in the room without friction.
-- A sponsor placement should never delay any of the above.
-
-When two implementations are equally correct, choose the one that gets people playing faster.
-
----
-
-## Why This Philosophy Matters for Engineering
-
-Engineering decisions compound. A small friction point in room setup affects thousands of organizers. A sponsor popup that saves a millisecond of load time costs minutes of real activity time across every room it interrupts.
-
-This philosophy should influence:
-
-- **Default paths.** Balanced Teams is free and prominent because most organizers need it first.
-- **Feature gating.** Complete features unlock capability, not basic participation.
-- **UI density.** The Arena shows what matters for the current moment — not everything the product can do.
-- **Performance budgets.** Slow loads are organizational delays.
-- **Scope discipline.** Unrelated improvements in a PR are organizational delays for reviewers.
-- **Sponsor restraint.** Revenue that interrupts play destroys the value that makes sponsorship worth offering.
-
-Build deliberately. Launch simply. Measure honestly. Improve continuously.
-
-Participation begins here.
-
-For agent-level operating rules, see [AGENTS.md](../../AGENTS.md).
-For Arena design standards, see [docs/design/ARENA_DESIGN_DIRECTION.md](../design/ARENA_DESIGN_DIRECTION.md).
+Helping organizers organize. Helping participants participate. Helping groups spend less time waiting — and more time playing.
