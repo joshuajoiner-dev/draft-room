@@ -1,4 +1,5 @@
 import { reassignPlayer, unassignPlayer, undoLatestAssignment } from "@/lib/room/actions";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { PrintTeamsButton } from "@/components/room/PrintTeamsButton";
 import type { Player, RoomStatus, Team, TeamAssignment } from "@/types/database";
 
@@ -111,6 +112,10 @@ export function GeneratedTeams({ roomId, roomName, roomCode, roomStatus, teams, 
             </article>
           );
         })}
+      </div>
+
+      <div className="print-only venue-sponsor-print">
+        <VenuePresentation placement="printable_roster_footer" variant="footer" />
       </div>
     </section>
   );

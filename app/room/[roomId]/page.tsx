@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
-import { DemoPresentation } from "@/components/presentation/DemoPresentation";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { QRCodePanel } from "@/components/room/QRCodePanel";
 import { RoomHeader } from "@/components/room/RoomHeader";
 import { RoomPlayerList } from "@/components/room/RoomPlayerList";
@@ -30,7 +30,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
       <div className="stack">
         <RoomHeader room={room} />
 
-        <DemoPresentation placement="leaderboard" />
+        <VenuePresentation placement="leaderboard" />
 
         <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
 
@@ -45,7 +45,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
           </Link>
         </div>
 
-        <DemoPresentation placement="footer" />
+        <VenuePresentation placement="footer" />
       </div>
     </AppFrame>
   );

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import type { Room } from "@/types/database";
 
 type LiveEventPanelProps = {
@@ -23,6 +24,8 @@ const statusLabels: Record<Room["status"], string> = {
 export function LiveEventPanel({ children, playerCount, room, teamCount }: LiveEventPanelProps) {
   return (
     <section className="live-event-panel" aria-label="Live event status">
+      <VenuePresentation placement="leaderboard" />
+
       <div className="live-event-header">
         <p className="admin-panel-label">Live Event</p>
         <strong>{statusLabels[room.status]}</strong>

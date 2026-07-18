@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
-import { DemoPresentation } from "@/components/presentation/DemoPresentation";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { AdminQuickGuide } from "@/components/room/AdminQuickGuide";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
@@ -149,7 +149,6 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
                 }
               />
             </div>
-            <DemoPresentation placement="leaderboard" />
           </aside>
         </div>
 
@@ -171,7 +170,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           View Teams
         </Link>
 
-        <DemoPresentation placement="footer" />
+        <VenuePresentation placement="footer" />
       </div>
     </AppFrame>
   );

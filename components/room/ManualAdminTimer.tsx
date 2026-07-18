@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 
 const TIME_PATTERN = /^\d{1,2}:\d{2}:\d{2}$/;
 
@@ -125,6 +126,8 @@ export function ManualAdminTimer() {
           Reset
         </button>
       </div>
+
+      <VenuePresentation placement="timer_panel" variant="mark" />
     </section>
   );
 }
