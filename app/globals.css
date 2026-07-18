@@ -522,7 +522,7 @@ select {
 
 .presentation-slot-below_qr {
   justify-self: center;
-  width: min(100%, 280px);
+  width: min(100%, 188px);
 }
 
 .venue-sponsor {
@@ -1009,25 +1009,27 @@ a:focus-visible {
 .qr-box {
   display: grid;
   place-items: center;
-  min-height: 292px;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: center;
   border: 1px solid rgba(46, 199, 255, 0.18);
   border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(46, 199, 255, 0.08), transparent 38%),
     #ffffff;
-  padding: 18px;
+  padding: 14px;
 }
 
 .qr-box img,
 .qr-box span {
-  width: min(100%, 280px) !important;
+  width: min(100%, 188px) !important;
   height: auto;
 }
 
 .qr-loading {
   display: grid;
   place-items: center;
-  width: min(100%, 280px);
+  width: min(100%, 188px);
   aspect-ratio: 1;
   border-radius: 8px;
   background: #f2f2f2;
@@ -1091,15 +1093,10 @@ a:focus-visible {
     font-size: clamp(28px, 2.2vw, 34px);
   }
 
-  .event-control-center .qr-box {
-    min-height: 320px;
-    padding: 22px;
-  }
-
   .event-control-center .qr-box img,
   .event-control-center .qr-box span,
   .event-control-center .qr-loading {
-    width: min(100%, 280px) !important;
+    width: min(100%, 188px) !important;
   }
 }
 

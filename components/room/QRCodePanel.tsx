@@ -69,7 +69,7 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
 
       <div className="qr-box" id="room-qr-code" aria-live="polite">
         {src ? (
-          <Image alt="Room join QR code" height={280} priority src={src} unoptimized width={280} />
+          <Image alt="Room join QR code" height={188} priority src={src} unoptimized width={188} />
         ) : (
           <div className="qr-loading" role="status">
             Generating QR code...
