@@ -27,7 +27,12 @@ function formatSeconds(totalSeconds: number) {
   return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
 }
 
-export function ManualAdminTimer() {
+type ManualAdminTimerProps = {
+  playerCount?: number;
+  teamCount?: number;
+};
+
+export function ManualAdminTimer({ playerCount = 0, teamCount = 0 }: ManualAdminTimerProps) {
   const [inputValue, setInputValue] = useState("00:05:00");
   const [savedSeconds, setSavedSeconds] = useState(300);
   const [secondsLeft, setSecondsLeft] = useState(300);
@@ -127,7 +132,11 @@ export function ManualAdminTimer() {
         </button>
       </div>
 
-      <VenuePresentation placement="timer_panel" variant="mark" />
+      <VenuePresentation
+        context={{ playerCount, teamCount, surface: "admin" }}
+        placement="timer_panel"
+        variant="mark"
+      />
     </section>
   );
 }

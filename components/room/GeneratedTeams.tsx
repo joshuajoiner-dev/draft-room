@@ -115,7 +115,11 @@ export function GeneratedTeams({ roomId, roomName, roomCode, roomStatus, teams, 
       </div>
 
       <div className="print-only venue-sponsor-print">
-        <VenuePresentation placement="printable_roster_footer" variant="footer" />
+      <VenuePresentation
+        context={{ playerCount: players.length, teamCount: teams.length, surface: "print" }}
+        placement="printable_roster_footer"
+        variant="footer"
+      />
       </div>
     </section>
   );

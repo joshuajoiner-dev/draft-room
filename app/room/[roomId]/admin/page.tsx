@@ -116,7 +116,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
             <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length} />
             <AdminQuickGuide />
             <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
-            <RoomPlayerList roomId={room.id} players={players} />
+            <RoomPlayerList roomId={room.id} players={players} teamCount={teams.length} />
             <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
             <BalancedRandomForm
               roomId={room.id}
@@ -127,7 +127,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           </main>
 
           <aside className="event-control-column event-control-right" aria-label="Complete tools and event timer">
-            <ManualAdminTimer />
+            <ManualAdminTimer playerCount={players.length} teamCount={teams.length} />
             <div className="complete-features-stack">
               <p className="admin-panel-label">Complete Features</p>
               <FeatureGatedModes
@@ -170,7 +170,10 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           View Teams
         </Link>
 
-        <VenuePresentation placement="footer" />
+        <VenuePresentation
+          context={{ playerCount: players.length, teamCount: teams.length, surface: "admin" }}
+          placement="footer"
+        />
       </div>
     </AppFrame>
   );

@@ -1,9 +1,11 @@
 import { PresentationSlot } from "@/components/presentation/PresentationSlot";
 import { ENABLE_VENUE_SPONSORS, venueSponsors, type VenueSponsorPlacement } from "@/components/presentation/venueSponsors";
+import { isVenueSponsorVisible, type VenueArenaContext } from "@/components/presentation/venueSponsorVisibility";
 
 type VenuePresentationProps = {
   placement: VenueSponsorPlacement;
   variant?: "ribbon" | "mark" | "footer";
+  context?: VenueArenaContext;
 };
 
 function VenueSponsorRibbon({ label, name, tagline }: { label: string; name: string; tagline?: string }) {
@@ -35,7 +37,7 @@ function VenueSponsorFooter({ label, name, tagline }: { label: string; name: str
   );
 }
 
-export function VenuePresentation({ placement, variant }: VenuePresentationProps) {
+export function VenuePresentation({ placement, variant, context }: VenuePresentationProps) {
   if (!ENABLE_VENUE_SPONSORS) {
     return null;
   }
@@ -43,6 +45,10 @@ export function VenuePresentation({ placement, variant }: VenuePresentationProps
   const sponsor = venueSponsors[placement];
 
   if (!sponsor) {
+    return null;
+  }
+
+  if (context && !isVenueSponsorVisible(placement, context)) {
     return null;
   }
 

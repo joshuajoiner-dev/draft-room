@@ -9,12 +9,6 @@ type LiveEventPanelProps = {
   teamCount: number;
 };
 
-const formatLabels: Record<NonNullable<Room["team_creation_mode"]>, string> = {
-  balanced_random: "Balanced",
-  captain_draft: "Captain Draft",
-  random_teams: "Quick Random"
-};
-
 const statusLabels: Record<Room["status"], string> = {
   drafting: "Drafting",
   finalized: "Final",
@@ -24,7 +18,10 @@ const statusLabels: Record<Room["status"], string> = {
 export function LiveEventPanel({ children, playerCount, room, teamCount }: LiveEventPanelProps) {
   return (
     <section className="live-event-panel" aria-label="Live event status">
-      <VenuePresentation placement="leaderboard" />
+      <VenuePresentation
+        context={{ playerCount, teamCount, surface: "admin" }}
+        placement="leaderboard"
+      />
 
       <div className="live-event-header">
         <p className="admin-panel-label">Live Event</p>
