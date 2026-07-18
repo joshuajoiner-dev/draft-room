@@ -14,9 +14,6 @@ export function AdminQuickGuide() {
           <li key={step}>{step}</li>
         ))}
       </ol>
-      <p className="quick-start-upgrade">
-        Complete tools → <a href="https://joindraftroom.com">JoinDraftRoom.com</a>
-      </p>
     </section>
   );
 }

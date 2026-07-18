@@ -8,10 +8,9 @@ import { DemoPresentation } from "@/components/presentation/DemoPresentation";
 type QRCodePanelProps = {
   joinUrl: string;
   roomCode: string;
-  upgradeHref?: string;
 };
 
-export function QRCodePanel({ joinUrl, roomCode, upgradeHref }: QRCodePanelProps) {
+export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
   const [src, setSrc] = useState("");
   const [copyStatus, setCopyStatus] = useState("");
 
@@ -60,11 +59,6 @@ export function QRCodePanel({ joinUrl, roomCode, upgradeHref }: QRCodePanelProps
         <a className="button button-secondary share-qr-button" href="#room-qr-code">
           Share QR
         </a>
-        {upgradeHref ? (
-          <a className="button button-orange" href={upgradeHref}>
-            Upgrade Now
-          </a>
-        ) : null}
       </div>
 
       {copyStatus ? (

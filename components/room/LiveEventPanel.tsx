@@ -37,14 +37,6 @@ export function LiveEventPanel({ children, playerCount, room, teamCount }: LiveE
           <dt>Teams</dt>
           <dd>{teamCount}</dd>
         </div>
-        <div>
-          <dt>Room Status</dt>
-          <dd>{statusLabels[room.status]}</dd>
-        </div>
-        <div>
-          <dt>Format</dt>
-          <dd>{room.team_creation_mode ? formatLabels[room.team_creation_mode] : "Not Set"}</dd>
-        </div>
       </dl>
 
       {children ? <div className="live-event-timer">{children}</div> : null}

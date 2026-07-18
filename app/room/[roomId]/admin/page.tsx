@@ -40,8 +40,6 @@ function getOrigin() {
   return `${protocol}://${host}`;
 }
 
-const upgradeCheckoutUrl = process.env.NEXT_PUBLIC_UPGRADE_CHECKOUT_URL ?? "#complete-unlock";
-
 const formatLabels = {
   balanced_random: "Balanced",
   captain_draft: "Captain Draft",
@@ -88,11 +86,19 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
             <RoomHeader room={room} />
 
             <section className="card compact-panel">
-              <p className="admin-panel-label">Room Details</p>
+              <p className="admin-panel-label">Event Overview</p>
               <dl className="detail-list">
                 <div>
                   <dt>Event</dt>
                   <dd>{room.name}</dd>
+                </div>
+                <div>
+                  <dt>Status</dt>
+                  <dd>{statusLabels[room.status]}</dd>
+                </div>
+                <div>
+                  <dt>Format</dt>
+                  <dd>{room.team_creation_mode ? formatLabels[room.team_creation_mode] : "Not Set"}</dd>
                 </div>
                 <div>
                   <dt>Players</dt>
@@ -104,26 +110,12 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
                 </div>
               </dl>
             </section>
-
-            <section className="card compact-panel">
-              <p className="admin-panel-label">Event Status</p>
-              <dl className="detail-list">
-                <div>
-                  <dt>Status</dt>
-                  <dd>{statusLabels[room.status]}</dd>
-                </div>
-                <div>
-                  <dt>Format</dt>
-                  <dd>{room.team_creation_mode ? formatLabels[room.team_creation_mode] : "Not Set"}</dd>
-                </div>
-              </dl>
-            </section>
           </aside>
 
           <main className="event-control-column event-control-center" aria-label="Primary event controls">
             <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length} />
             <AdminQuickGuide />
-            <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} upgradeHref={upgradeCheckoutUrl} />
+            <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
             <RoomPlayerList roomId={room.id} players={players} />
             <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
             <BalancedRandomForm

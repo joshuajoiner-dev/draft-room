@@ -1,6 +1,6 @@
 import { PresentationSlot } from "@/components/presentation/PresentationSlot";
 
-const SHOW_DEMO_PRESENTATION = true;
+const SHOW_DEMO_PRESENTATION = false;
 
 type DemoPresentationPlacement = "leaderboard" | "below_qr" | "footer";
 
