@@ -19,7 +19,7 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
 
     setSrc("");
     QRCode.toDataURL(joinUrl, {
-      width: 420,
+      width: 480,
       margin: 2,
       color: {
         dark: "#000000",
@@ -69,7 +69,7 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
 
       <div className="qr-box" id="room-qr-code" aria-live="polite">
         {src ? (
-          <Image alt="Room join QR code" height={252} priority src={src} unoptimized width={252} />
+          <Image alt="Room join QR code" height={280} priority src={src} unoptimized width={280} />
         ) : (
           <div className="qr-loading" role="status">
             Generating QR code...

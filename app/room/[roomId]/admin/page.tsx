@@ -2,7 +2,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
 import { VenuePresentation } from "@/components/presentation/VenuePresentation";
-import { AdminQuickGuide } from "@/components/room/AdminQuickGuide";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
@@ -114,7 +113,6 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
 
           <main className="event-control-column event-control-center" aria-label="Primary event controls">
             <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length} />
-            <AdminQuickGuide />
             <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
             <RoomPlayerList roomId={room.id} players={players} teamCount={teams.length} />
             <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />

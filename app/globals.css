@@ -397,7 +397,6 @@ select {
   overflow-wrap: anywhere;
 }
 
-.admin-quick-guide,
 .manual-admin-timer,
 .live-event-panel {
   position: relative;
@@ -416,7 +415,6 @@ select {
     0 0 26px rgba(46, 199, 255, 0.045);
 }
 
-.admin-quick-guide::before,
 .manual-admin-timer::before,
 .live-event-panel::before {
   content: "";
@@ -429,20 +427,6 @@ select {
     linear-gradient(90deg, transparent 0 24%, rgba(255, 255, 255, 0.16) 24% 24.6%, transparent 24.6%),
     linear-gradient(28deg, transparent 0 52%, rgba(97, 239, 98, 0.16) 52% 52.6%, transparent 52.6%),
     radial-gradient(circle at 82% 18%, transparent 0 28px, rgba(46, 199, 255, 0.28) 29px 30px, transparent 31px);
-}
-
-.admin-quick-guide::before {
-  display: none;
-}
-
-.admin-quick-guide {
-  border-color: rgba(255, 255, 255, 0.12);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(0, 0, 0, 0.2)),
-    rgba(8, 12, 13, 0.84);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 16px 42px rgba(0, 0, 0, 0.18);
 }
 
 .manual-admin-timer {
@@ -519,50 +503,7 @@ select {
   padding: 12px;
 }
 
-.quick-start-list {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: quick-start;
-}
-
-.quick-start-list li {
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  gap: 10px;
-  align-items: center;
-  min-height: 34px;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.25;
-  counter-increment: quick-start;
-}
-
-.quick-start-list li::before {
-  content: counter(quick-start) ".";
-  color: var(--scoreboard-lit);
-  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-weight: 800;
-}
-
-.quick-start-upgrade {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.35;
-}
-
-.quick-start-upgrade a {
-  color: var(--upgrade);
-  font-weight: 800;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.presentation-slot {
+.draft-progress {
   width: 100%;
 }
 
@@ -657,7 +598,10 @@ select {
 .qr-card .venue-sponsor-mark {
   justify-items: center;
   grid-template-columns: minmax(0, 1fr);
+  margin-top: 6px;
+  padding-top: 14px;
   text-align: center;
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .venue-sponsor-footer {
@@ -1076,14 +1020,14 @@ a:focus-visible {
 
 .qr-box img,
 .qr-box span {
-  width: min(100%, 252px) !important;
+  width: min(100%, 280px) !important;
   height: auto;
 }
 
 .qr-loading {
   display: grid;
   place-items: center;
-  width: min(100%, 252px);
+  width: min(100%, 280px);
   aspect-ratio: 1;
   border-radius: 8px;
   background: #f2f2f2;
@@ -1140,6 +1084,23 @@ a:focus-visible {
 
 .print-only {
   display: none;
+}
+
+@media (min-width: 1024px) {
+  .event-control-center .qr-card .join-link-panel strong {
+    font-size: clamp(28px, 2.2vw, 34px);
+  }
+
+  .event-control-center .qr-box {
+    min-height: 320px;
+    padding: 22px;
+  }
+
+  .event-control-center .qr-box img,
+  .event-control-center .qr-box span,
+  .event-control-center .qr-loading {
+    width: min(100%, 280px) !important;
+  }
 }
 
 @media (min-width: 560px) {
