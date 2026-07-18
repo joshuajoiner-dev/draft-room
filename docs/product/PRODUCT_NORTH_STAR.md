@@ -16,6 +16,16 @@ Every engineering decision should ultimately support this principle.
 
 ---
 
+## Guiding Principle
+
+JoinDraftPick exists to remove friction, not to create engagement.
+
+Every unnecessary click, decision, delay, or distraction increases the distance between gathering and participation.
+
+The product succeeds when people forget about the software because the event has already begun.
+
+---
+
 ## Mission
 
 Create the fastest, fairest, and most enjoyable way for groups to move from gathering to playing.
@@ -28,7 +38,7 @@ Increase participation. Increase momentum. Increase confidence.
 
 ## Vision
 
-JoinDraftPick should become the trusted operating system for informal group organization.
+JoinDraftPick should become the most trusted way to help people organize themselves into participation.
 
 Whether the setting is a PE class, recess, athletics, recreation, camps, youth programs, corporate team-building, or community events, the experience should always feel immediate, organized, and welcoming.
 
@@ -42,9 +52,11 @@ For enduring company vision language, see [VISION_2027.md](../VISION_2027.md).
 
 **More Play. Less Waiting.**
 
-This is not merely a marketing slogan. It is the repository's primary decision-making filter.
+This is not merely a marketing slogan. It is the product's primary decision filter.
 
-Whenever multiple implementation options exist, prefer the one that reduces friction and helps people begin participating sooner.
+Whenever multiple implementation options exist, prefer the one that reduces waiting, simplifies organization, and increases participation — even if the solution is technically less elaborate.
+
+Complexity should justify itself. Simplicity earns its place.
 
 The founding promise remains: **One Organizer. One Device. One Minute.** See [FOUNDING.md](../FOUNDING.md).
 
@@ -96,6 +108,14 @@ For agent operating rules and workflow protection, see [AGENTS.md](../../AGENTS.
 
 ---
 
+## Principles Before Features
+
+Features evolve. Technology evolves. Design trends evolve. The repository's principles should remain remarkably stable.
+
+JoinDraftPick should preserve enduring ideas before pursuing new functionality.
+
+---
+
 ## What We Build
 
 JoinDraftPick focuses on lightweight event organization.
@@ -124,9 +144,7 @@ We intentionally solve one problem exceptionally well instead of solving many pr
 
 ## Long-Term Principle
 
-The product should remain understandable years from now.
-
-Features may evolve. Technology will evolve. Design trends will evolve. The underlying philosophy should not.
+The product should remain understandable years from now. The underlying philosophy should not.
 
 Durable principles outlive fashionable interfaces.
 
@@ -157,3 +175,11 @@ Every commit should move the product a little closer to its north star.
 Not by adding complexity. By removing friction.
 
 Helping organizers organize. Helping participants participate. Helping groups spend less time waiting — and more time playing.
+
+---
+
+## Founder Standard
+
+Every improvement should make the next event begin a little sooner, feel a little fairer, and require a little less effort.
+
+If we consistently achieve those outcomes, the product is moving toward its North Star.
