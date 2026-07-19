@@ -3,33 +3,23 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { DemoPresentation } from "@/components/presentation/DemoPresentation";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 
 type QRCodePanelProps = {
   joinUrl: string;
-  upgradeHref?: string;
+  roomCode: string;
 };
 
-function shortenUrl(url: string) {
-  try {
-    const parsedUrl = new URL(url);
-    return `${parsedUrl.host}${parsedUrl.pathname}`;
-  } catch {
-    return url;
-  }
-}
-
-export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
+export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
   const [src, setSrc] = useState("");
   const [copyStatus, setCopyStatus] = useState("");
-  const displayUrl = shortenUrl(joinUrl);
 
   useEffect(() => {
     let mounted = true;
 
     setSrc("");
     QRCode.toDataURL(joinUrl, {
-      width: 420,
+      width: 480,
       margin: 2,
       color: {
         dark: "#000000",
@@ -55,19 +45,20 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
     <section className="card stack qr-card">
       <div className="stack-tight">
         <h2>Join link</h2>
-        <p className="muted">Players can scan or open this link.</p>
+        <p className="muted">Players can scan the QR or use the room code.</p>
       </div>
 
       <div className="join-link-row">
-        <div className="link-box" title={joinUrl}>{displayUrl}</div>
+        <div className="join-link-panel">
+          <span>Room Code</span>
+          <strong>{roomCode}</strong>
+        </div>
         <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
           Copy Link
         </button>
-        {upgradeHref ? (
-          <a className="button button-orange" href={upgradeHref}>
-            Upgrade Now
-          </a>
-        ) : null}
+        <a className="button button-secondary share-qr-button" href="#room-qr-code">
+          Share QR
+        </a>
       </div>
 
       {copyStatus ? (
@@ -76,9 +67,9 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
         </p>
       ) : null}
 
-      <div className="qr-box" aria-live="polite">
+      <div className="qr-box" id="room-qr-code" aria-live="polite">
         {src ? (
-          <Image alt="Room join QR code" height={252} priority src={src} unoptimized width={252} />
+          <Image alt="Room join QR code" height={188} priority src={src} unoptimized width={188} />
         ) : (
           <div className="qr-loading" role="status">
             Generating QR code...
@@ -86,7 +77,7 @@ export function QRCodePanel({ joinUrl, upgradeHref }: QRCodePanelProps) {
         )}
       </div>
 
-      <DemoPresentation placement="below_qr" />
+      <VenuePresentation placement="below_qr" />
     </section>
   );
 }

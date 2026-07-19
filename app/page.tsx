@@ -9,7 +9,7 @@ export default function HomePage() {
           <div className="stack-tight">
             <h1 className="title">Teams, fast.</h1>
             <p className="body-copy">
-              Create a live room, let players join, and keep everyone in one simple pool.
+              Organize teams in under one minute for classes, camps, leagues, and community events.
             </p>
           </div>
 

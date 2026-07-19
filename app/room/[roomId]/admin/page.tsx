@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { AppFrame } from "@/components/layout/AppFrame";
-import { DemoPresentation } from "@/components/presentation/DemoPresentation";
-import { AdminQuickGuide } from "@/components/room/AdminQuickGuide";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
+import { EventScoreboard } from "@/components/room/EventScoreboard";
 import { FeatureGatedModes } from "@/components/room/FeatureGatedModes";
 import { GeneratedTeams } from "@/components/room/GeneratedTeams";
+import { LiveEventPanel } from "@/components/room/LiveEventPanel";
 import { ManualAdminTimer } from "@/components/room/ManualAdminTimer";
 import { PlayerNameForm } from "@/components/room/PlayerNameForm";
 import { QRCodePanel } from "@/components/room/QRCodePanel";
@@ -39,8 +40,6 @@ function getOrigin() {
   return `${protocol}://${host}`;
 }
 
-const upgradeCheckoutUrl = process.env.NEXT_PUBLIC_UPGRADE_CHECKOUT_URL ?? "#complete-unlock";
-
 export default async function AdminPage({ params, searchParams }: AdminPageProps) {
   const { room, players, teams, assignments } = await getRoomState(params.roomId);
   const joinUrl = `${getOrigin()}/room/${room.id}/join`;
@@ -70,49 +69,51 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   return (
     <AppFrame variant="wide">
       <div className="stack">
-        <RoomHeader
-          room={room}
-          tools={
-            <aside className="admin-helper-panel" aria-label="Admin organizer tools">
-              <AdminQuickGuide />
-              <ManualAdminTimer />
-            </aside>
-          }
-        />
+        <div className="event-control-layout">
+          <aside className="event-control-column event-control-left" aria-label="Room command rail">
+            <RoomHeader room={room} />
 
-        <DemoPresentation placement="leaderboard" />
+            <EventScoreboard room={room} playerCount={players.length} teamCount={teams.length} />
+          </aside>
 
-        <QRCodePanel joinUrl={joinUrl} upgradeHref={upgradeCheckoutUrl} />
-
-        <RoomPlayerList roomId={room.id} players={players} />
-
-        <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
-
-        <BalancedRandomForm
-          roomId={room.id}
-          playerCount={players.length}
-          hasTeams={teams.length > 0}
-          message={balancedRandomMessage}
-        />
-
-        <FeatureGatedModes
-          quickRandom={
-            <RandomTeamsForm
+          <main className="event-control-column event-control-center" aria-label="Primary event controls">
+            <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length} />
+            <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
+            <RoomPlayerList roomId={room.id} players={players} teamCount={teams.length} />
+            <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
+            <BalancedRandomForm
               roomId={room.id}
               playerCount={players.length}
               hasTeams={teams.length > 0}
-              message={randomTeamsMessage}
+              message={balancedRandomMessage}
             />
-          }
-          captainDraft={
-            <CaptainDraftSetupForm
-              roomId={room.id}
-              players={players}
-              hasCaptainTeams={isCaptainDraft && teams.length > 0}
-              message={captainDraftMessage}
-            />
-          }
-        />
+          </main>
+
+          <aside className="event-control-column event-control-right" aria-label="Complete tools and event timer">
+            <ManualAdminTimer playerCount={players.length} teamCount={teams.length} />
+            <div className="complete-features-stack">
+              <p className="admin-panel-label">Complete Features</p>
+              <FeatureGatedModes
+                quickRandom={
+                  <RandomTeamsForm
+                    roomId={room.id}
+                    playerCount={players.length}
+                    hasTeams={teams.length > 0}
+                    message={randomTeamsMessage}
+                  />
+                }
+                captainDraft={
+                  <CaptainDraftSetupForm
+                    roomId={room.id}
+                    players={players}
+                    hasCaptainTeams={isCaptainDraft && teams.length > 0}
+                    message={captainDraftMessage}
+                  />
+                }
+              />
+            </div>
+          </aside>
+        </div>
 
         {isCaptainDraft ? (
           <CaptainDraftSummary roomId={room.id} teams={teams} players={players} />
@@ -129,10 +130,13 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
         )}
 
         <Link className="button button-secondary" href={`/room/${room.id}`}>
-          View Room
+          View Teams
         </Link>
 
-        <DemoPresentation placement="footer" />
+        <VenuePresentation
+          context={{ playerCount: players.length, teamCount: teams.length, surface: "admin" }}
+          placement="footer"
+        />
       </div>
     </AppFrame>
   );

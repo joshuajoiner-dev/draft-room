@@ -19,7 +19,7 @@ export function CaptainDraftSetupForm({ roomId, players, hasCaptainTeams, messag
   const disabled = players.length < teamCount;
 
   return (
-    <section className="card stack" data-testid="captain-draft-setup">
+    <section className="card stack mode-card mode-card--orange" data-testid="captain-draft-setup">
       <div className="stack-tight">
         <h2>👥 Captain Draft</h2>
         <p className="muted">Choose one captain per team. Captains start on their own teams.</p>
@@ -62,7 +62,7 @@ export function CaptainDraftSetupForm({ roomId, players, hasCaptainTeams, messag
         <button
           aria-disabled={disabled}
           aria-label={disabled ? "Import at least one player per captain team before saving" : undefined}
-          className="button"
+          className="button button-orange"
           data-testid="save-captain-teams"
           disabled={disabled}
           type="submit"

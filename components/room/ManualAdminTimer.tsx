@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 
 const TIME_PATTERN = /^\d{1,2}:\d{2}:\d{2}$/;
 
@@ -26,7 +27,12 @@ function formatSeconds(totalSeconds: number) {
   return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
 }
 
-export function ManualAdminTimer() {
+type ManualAdminTimerProps = {
+  playerCount?: number;
+  teamCount?: number;
+};
+
+export function ManualAdminTimer({ playerCount = 0, teamCount = 0 }: ManualAdminTimerProps) {
   const [inputValue, setInputValue] = useState("00:05:00");
   const [savedSeconds, setSavedSeconds] = useState(300);
   const [secondsLeft, setSecondsLeft] = useState(300);
@@ -79,10 +85,15 @@ export function ManualAdminTimer() {
   }
 
   return (
-    <section className="manual-admin-timer" aria-label="Manual admin timer">
+    <section
+      aria-label="Manual admin timer"
+      className={`manual-admin-timer${secondsLeft === 0 && !isRunning ? " manual-admin-timer--elapsed" : ""}`}
+    >
       <div className="manual-timer-header">
         <p className="admin-panel-label">Manual Timer</p>
-        <strong aria-live="polite">{formatSeconds(secondsLeft)}</strong>
+        <strong aria-live="polite" className="digital-time">
+          {formatSeconds(secondsLeft)}
+        </strong>
       </div>
 
       <label className="sr-only" htmlFor="manual-admin-timer-input">
@@ -123,6 +134,12 @@ export function ManualAdminTimer() {
           Reset
         </button>
       </div>
+
+      <VenuePresentation
+        context={{ playerCount, teamCount, surface: "admin" }}
+        placement="timer_panel"
+        variant="mark"
+      />
     </section>
   );
 }

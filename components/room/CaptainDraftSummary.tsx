@@ -57,7 +57,7 @@ export function CaptainDraftSummary({ roomId, teams, players }: CaptainDraftSumm
       )}
 
       <form action={beginCaptainDraft.bind(null, roomId)}>
-        <button className="button" data-testid="begin-captain-draft" type="submit">
+        <button className="button button-orange" data-testid="begin-captain-draft" type="submit">
           Begin Captain Draft
         </button>
       </form>

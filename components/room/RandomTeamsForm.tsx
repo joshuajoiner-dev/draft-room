@@ -11,10 +11,10 @@ export function RandomTeamsForm({ roomId, playerCount, hasTeams, message }: Rand
   const action = generateRandomTeams.bind(null, roomId);
 
   return (
-    <form action={action} className="card form">
+    <form action={action} className="card form mode-card mode-card--green">
       <div className="stack-tight">
         <h2>⚡ Quick Random</h2>
-        <p className="muted">Choose a team count and randomly assign all current players.</p>
+        <p className="muted">Assign players completely at random for the fastest possible team split.</p>
       </div>
 
       {message ? <div className="success">{message}</div> : null}

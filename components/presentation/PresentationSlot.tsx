@@ -32,11 +32,11 @@ export function PresentationSlot({
   );
 
   if (!active || !children) {
-    return <div aria-hidden="true" className={slotClassName} data-placement={placement} />;
+    return null;
   }
 
   return (
-    <section aria-label="Event presentation" className={slotClassName} data-placement={placement}>
+    <section aria-label="Venue partner" className={slotClassName} data-placement={placement}>
       {children}
     </section>
   );

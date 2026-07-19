@@ -20,11 +20,22 @@ JoinDraftPick sponsorship should be:
 Hard rules:
 
 - No popups.
+- No modal sponsor advertising.
+- No countdown or timed delays before workflow access.
 - No autoplay video.
 - No flashing animation.
 - No generic web ads.
 - No ad network placements.
 - No sponsor content that blocks room setup, joining, drafting, printing, or unlocking.
+
+## Governance Principles
+
+Sponsor placement is **venue architecture**, not interruptive advertising.
+
+- **Workflow protection:** Primary organizer and player paths always retain visual and functional priority.
+- **High visibility without interruption:** Sponsors may be prominent when passive — ribbons, footers, waiting-state banners — but must never delay or obstruct a workflow step.
+- **Graceful sponsor-free states:** Rooms must remain credible, complete, and visually coherent when no sponsor is active. Presentation slots render nothing when inactive.
+- **Mobile restraint:** Sponsor treatment must become more restrained as viewport space decreases. A placement approved for desktop is not automatically approved for mobile.
 
 ## Placement Opportunities
 

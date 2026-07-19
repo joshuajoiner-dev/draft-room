@@ -5,6 +5,9 @@ import { useEffect, useState, useTransition } from "react";
 import { validateUnlockCode } from "@/lib/room/actions";
 
 const COMPLETE_UNLOCK_KEY = "draft-room-complete-unlocked";
+// Temporary launch access: flip this off when the first 100-user feedback window ends.
+const FOUNDER_ACCESS_ENABLED = true;
+const FOUNDER_ACCESS_MESSAGE = "All Complete features are currently unlocked while we build our first community.";
 
 type FeatureGatedModesProps = {
   quickRandom: ReactNode;
@@ -93,9 +96,17 @@ function storeLocalUnlock(unlock: unknown) {
   }
 }
 
-function LockedModeCard({ title, description }: { title: string; description: string }) {
+function LockedModeCard({
+  description,
+  modeTone,
+  title
+}: {
+  description: string;
+  modeTone: "green" | "orange";
+  title: string;
+}) {
   return (
-    <section className="card form locked-mode" aria-label={`${title} locked`}>
+    <section className={`card form locked-mode mode-card mode-card--${modeTone}`} aria-label={`${title} locked`}>
       <div className="stack-tight">
         <h2>{title}</h2>
         <p className="muted">{description}</p>
@@ -110,11 +121,20 @@ function LockedModeCard({ title, description }: { title: string; description: st
 }
 
 export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedModesProps) {
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(FOUNDER_ACCESS_ENABLED);
   const [message, setMessage] = useState<UnlockMessage | null>(null);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
+    if (FOUNDER_ACCESS_ENABLED) {
+      setIsUnlocked(true);
+      setMessage({
+        tone: "success",
+        text: FOUNDER_ACCESS_MESSAGE
+      });
+      return;
+    }
+
     if (hasLocalUnlock()) {
       setIsUnlocked(true);
       setMessage({
@@ -155,39 +175,11 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
 
   return (
     <>
-      <section className="card form" data-testid="complete-unlock">
-        <div className="stack-tight">
-          <h2>Enter Unlock Code</h2>
-          <p className="muted">Unlock Draft Room Complete on this browser.</p>
-        </div>
-
-        {message ? <div className={message.tone === "success" ? "success" : "error"}>{message.text}</div> : null}
-
-        {!isUnlocked ? (
-          <form className="unlock-form" onSubmit={handleSubmit}>
-            <label className="label">
-              Unlock code
-              <input
-                autoCapitalize="characters"
-                className="input"
-                name="code"
-                placeholder="ENTER CODE"
-                required
-                type="text"
-              />
-            </label>
-
-            <button className="button button-orange unlock-submit" type="submit" disabled={isPending}>
-              {isPending ? "Checking..." : "Unlock Complete"}
-            </button>
-          </form>
-        ) : null}
-      </section>
-
       {!isUnlocked ? (
         <LockedModeCard
+          description="Assign players completely at random for the fastest possible team split."
+          modeTone="green"
           title="⚡ Quick Random"
-          description="Choose a team count and randomly assign all current players."
         />
       ) : null}
 
@@ -195,12 +187,53 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
 
       {!isUnlocked ? (
         <LockedModeCard
-          title="👥 Captain Draft"
           description="Choose one captain per team. Captains start on their own teams."
+          modeTone="orange"
+          title="👥 Captain Draft"
         />
       ) : null}
 
       <div hidden={!isUnlocked}>{captainDraft}</div>
+
+      <section className="founder-access-panel" data-testid="complete-unlock">
+        {FOUNDER_ACCESS_ENABLED ? (
+          <>
+            <h3 className="founder-access-heading">Founder Access</h3>
+            <p className="founder-access-note muted">{FOUNDER_ACCESS_MESSAGE}</p>
+          </>
+        ) : (
+          <>
+            <div className="stack-tight">
+              <h2>Enter Unlock Code</h2>
+              <p className="muted">
+                Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more.
+              </p>
+            </div>
+
+            {message ? <div className={message.tone === "success" ? "success" : "error"}>{message.text}</div> : null}
+
+            {!isUnlocked ? (
+              <form className="unlock-form" onSubmit={handleSubmit}>
+                <label className="label">
+                  Unlock code
+                  <input
+                    autoCapitalize="characters"
+                    className="input"
+                    name="code"
+                    placeholder="ENTER CODE"
+                    required
+                    type="text"
+                  />
+                </label>
+
+                <button className="button button-orange unlock-submit" type="submit" disabled={isPending}>
+                  {isPending ? "Checking..." : "Unlock Complete"}
+                </button>
+              </form>
+            ) : null}
+          </>
+        )}
+      </section>
     </>
   );
 }
