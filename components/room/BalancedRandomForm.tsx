@@ -11,7 +11,7 @@ export function BalancedRandomForm({ roomId, playerCount, hasTeams, message }: B
   const action = generateBalancedRandomTeams.bind(null, roomId);
 
   return (
-    <form action={action} className="card form" data-testid="balanced-random-form">
+    <form action={action} className="card form mode-card mode-card--green" data-testid="balanced-random-form">
       <div className="stack-tight">
         <h2>Create Balanced Teams</h2>
         <p className="muted">Create even teams from the current player pool.</p>

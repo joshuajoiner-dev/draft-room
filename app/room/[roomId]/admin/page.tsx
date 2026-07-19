@@ -5,6 +5,7 @@ import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
+import { EventScoreboard } from "@/components/room/EventScoreboard";
 import { FeatureGatedModes } from "@/components/room/FeatureGatedModes";
 import { GeneratedTeams } from "@/components/room/GeneratedTeams";
 import { LiveEventPanel } from "@/components/room/LiveEventPanel";
@@ -39,18 +40,6 @@ function getOrigin() {
   return `${protocol}://${host}`;
 }
 
-const formatLabels = {
-  balanced_random: "Balanced",
-  captain_draft: "Captain Draft",
-  random_teams: "Quick Random"
-} as const;
-
-const statusLabels = {
-  drafting: "Drafting",
-  finalized: "Final",
-  setup: "Open"
-} as const;
-
 export default async function AdminPage({ params, searchParams }: AdminPageProps) {
   const { room, players, teams, assignments } = await getRoomState(params.roomId);
   const joinUrl = `${getOrigin()}/room/${room.id}/join`;
@@ -84,31 +73,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           <aside className="event-control-column event-control-left" aria-label="Room command rail">
             <RoomHeader room={room} />
 
-            <section className="card compact-panel">
-              <p className="admin-panel-label">Event Overview</p>
-              <dl className="detail-list">
-                <div>
-                  <dt>Event</dt>
-                  <dd>{room.name}</dd>
-                </div>
-                <div>
-                  <dt>Status</dt>
-                  <dd>{statusLabels[room.status]}</dd>
-                </div>
-                <div>
-                  <dt>Format</dt>
-                  <dd>{room.team_creation_mode ? formatLabels[room.team_creation_mode] : "Not Set"}</dd>
-                </div>
-                <div>
-                  <dt>Players</dt>
-                  <dd>{players.length}</dd>
-                </div>
-                <div>
-                  <dt>Teams</dt>
-                  <dd>{teams.length}</dd>
-                </div>
-              </dl>
-            </section>
+            <EventScoreboard room={room} playerCount={players.length} teamCount={teams.length} />
           </aside>
 
           <main className="event-control-column event-control-center" aria-label="Primary event controls">

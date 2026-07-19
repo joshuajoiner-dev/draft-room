@@ -15,17 +15,38 @@ const statusLabels: Record<Room["status"], string> = {
   setup: "Open"
 };
 
+const statusTone: Record<Room["status"], "live" | "attention" | "success"> = {
+  setup: "attention",
+  drafting: "live",
+  finalized: "success"
+};
+
 export function LiveEventPanel({ children, playerCount, room, teamCount }: LiveEventPanelProps) {
+  const isLive = playerCount > 0 && room.status !== "finalized";
+
   return (
-    <section className="live-event-panel" aria-label="Live event status">
+    <section
+      className={`live-event-panel${isLive ? " live-event-panel--active" : ""}`}
+      aria-label="Live event status"
+    >
       <VenuePresentation
         context={{ playerCount, teamCount, surface: "admin" }}
         placement="leaderboard"
       />
 
       <div className="live-event-header">
-        <p className="admin-panel-label">Live Event</p>
-        <strong>{statusLabels[room.status]}</strong>
+        <div className="live-event-title-group">
+          <p className="admin-panel-label">Live Event</p>
+          {isLive ? (
+            <span className="live-event-indicator">
+              <span aria-hidden="true" className="live-event-dot" />
+              Live
+            </span>
+          ) : null}
+        </div>
+        <strong className={`live-event-status live-event-status--${statusTone[room.status]}`}>
+          {statusLabels[room.status]}
+        </strong>
       </div>
 
       <dl className="live-event-grid">

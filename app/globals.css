@@ -20,6 +20,11 @@
   --arena-red: #ff5b5b;
   --glass-line: rgba(255, 255, 255, 0.13);
   --venue-haze: rgba(255, 255, 255, 0.055);
+  --color-join: var(--accent);
+  --color-live: var(--arena-blue);
+  --color-attention: var(--output);
+  --color-organizer: var(--upgrade);
+  --color-critical: var(--danger);
 }
 
 * {
@@ -361,40 +366,93 @@ select {
   min-width: 0;
 }
 
-.detail-list {
-  display: grid;
+.event-scoreboard {
   gap: 10px;
+  border-color: rgba(46, 199, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(46, 199, 255, 0.05), transparent 42%),
+    rgba(8, 12, 16, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(46, 199, 255, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+.event-scoreboard-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.event-scoreboard-name {
   margin: 0;
-}
-
-.detail-list div {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 10px;
-}
-
-.detail-list div:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-
-.detail-list dt {
-  color: var(--muted);
-  font-size: 10px;
+  color: var(--text);
+  font-size: clamp(17px, 2.4vw, 20px);
   font-weight: 800;
-  letter-spacing: 0.09em;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.scoreboard-chip-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.scoreboard-chip {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  border: 1px solid rgba(46, 199, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 8px 10px;
+}
+
+.scoreboard-chip-label {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.detail-list dd {
-  margin: 0;
-  color: var(--text);
-  font-size: 15px;
+.scoreboard-chip-value {
+  color: var(--arena-cyan);
+  font-size: clamp(14px, 2vw, 16px);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.1;
   overflow-wrap: anywhere;
+}
+
+.scoreboard-status-chip {
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 5px 9px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.scoreboard-status-chip--live {
+  border: 1px solid rgba(46, 199, 255, 0.28);
+  background: rgba(46, 199, 255, 0.12);
+  color: var(--arena-cyan);
+}
+
+.scoreboard-status-chip--attention {
+  border: 1px solid rgba(255, 216, 77, 0.28);
+  background: rgba(255, 216, 77, 0.1);
+  color: var(--color-attention);
+}
+
+.scoreboard-status-chip--success {
+  border: 1px solid rgba(97, 239, 98, 0.28);
+  background: rgba(97, 239, 98, 0.1);
+  color: var(--color-join);
 }
 
 .manual-admin-timer,
@@ -404,11 +462,7 @@ select {
   display: grid;
   gap: 10px;
   overflow: hidden;
-  border: 1px solid rgba(46, 199, 255, 0.24);
   border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(46, 199, 255, 0.08), transparent 42%),
-    rgba(8, 14, 16, 0.78);
   padding: 14px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
@@ -425,15 +479,29 @@ select {
   pointer-events: none;
   background:
     linear-gradient(90deg, transparent 0 24%, rgba(255, 255, 255, 0.16) 24% 24.6%, transparent 24.6%),
-    linear-gradient(28deg, transparent 0 52%, rgba(97, 239, 98, 0.16) 52% 52.6%, transparent 52.6%),
+    linear-gradient(28deg, transparent 0 52%, rgba(46, 199, 255, 0.14) 52% 52.6%, transparent 52.6%),
     radial-gradient(circle at 82% 18%, transparent 0 28px, rgba(46, 199, 255, 0.28) 29px 30px, transparent 31px);
 }
 
 .manual-admin-timer {
-  border-color: rgba(156, 255, 143, 0.28);
+  border: 1px solid rgba(46, 199, 255, 0.22);
   background:
-    linear-gradient(180deg, rgba(156, 255, 143, 0.08), transparent),
-    var(--scoreboard);
+    linear-gradient(180deg, rgba(46, 199, 255, 0.06), transparent),
+    rgba(6, 10, 14, 0.92);
+}
+
+.manual-admin-timer--elapsed {
+  border-color: rgba(217, 74, 56, 0.34);
+  background:
+    linear-gradient(180deg, rgba(217, 74, 56, 0.08), transparent),
+    rgba(14, 6, 6, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 22px rgba(217, 74, 56, 0.08);
+}
+
+.manual-admin-timer--elapsed .digital-time {
+  color: #ffb4a8;
 }
 
 .admin-panel-label {
@@ -446,24 +514,86 @@ select {
 }
 
 .live-event-panel {
-  border-color: rgba(97, 239, 98, 0.22);
+  border: 1px solid rgba(46, 199, 255, 0.22);
   background:
-    linear-gradient(180deg, rgba(97, 239, 98, 0.06), transparent),
-    #07100b;
+    linear-gradient(180deg, rgba(46, 199, 255, 0.07), transparent),
+    #061018;
+}
+
+.live-event-panel--active {
+  border-color: rgba(46, 199, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 28px rgba(46, 199, 255, 0.07);
 }
 
 .live-event-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.live-event-header strong {
-  color: var(--scoreboard-lit);
-  font-size: 13px;
+.live-event-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.live-event-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--arena-cyan);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.live-event-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-live);
+  box-shadow: 0 0 8px rgba(46, 199, 255, 0.55);
+  animation: live-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.live-event-status {
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.live-event-status--live {
+  color: var(--arena-cyan);
+}
+
+.live-event-status--attention {
+  color: var(--color-attention);
+}
+
+.live-event-status--success {
+  color: var(--color-join);
+}
+
+.live-event-header strong {
+  font-weight: 800;
 }
 
 .live-event-grid {
@@ -475,8 +605,9 @@ select {
 
 .live-event-grid div {
   min-width: 0;
+  border: 1px solid rgba(46, 199, 255, 0.12);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.24);
   padding: 12px;
 }
 
@@ -490,7 +621,7 @@ select {
 
 .live-event-grid dd {
   margin: 4px 0 0;
-  color: var(--text);
+  color: var(--arena-cyan);
   font-size: clamp(22px, 4vw, 28px);
   font-weight: 800;
   line-height: 1.1;
@@ -838,6 +969,52 @@ a:focus-visible {
   opacity: 0.82;
 }
 
+.mode-card--green {
+  border-color: rgba(97, 239, 98, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(156, 255, 143, 0.06),
+    0 0 20px rgba(97, 239, 98, 0.04);
+}
+
+.mode-card--green::before {
+  opacity: 0.1;
+  background: linear-gradient(135deg, rgba(97, 239, 98, 0.16), transparent 58%);
+}
+
+.mode-card--orange {
+  border-color: rgba(255, 138, 31, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 177, 61, 0.06),
+    0 0 20px rgba(255, 138, 31, 0.04);
+}
+
+.mode-card--orange::before {
+  opacity: 0.1;
+  background: linear-gradient(135deg, rgba(255, 138, 31, 0.16), transparent 58%);
+}
+
+.founder-access-panel {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
+}
+
+.founder-access-heading {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.founder-access-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .locked-message {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
@@ -869,6 +1046,29 @@ a:focus-visible {
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
   padding: 14px 16px;
   font-weight: 800;
+}
+
+.players-panel {
+  border-color: rgba(156, 255, 143, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(156, 255, 143, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.22);
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.players-panel--active {
+  border-color: rgba(156, 255, 143, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(156, 255, 143, 0.08),
+    0 0 24px rgba(97, 239, 98, 0.06),
+    0 12px 32px rgba(0, 0, 0, 0.22);
+}
+
+.players-panel .empty-state {
+  border-color: rgba(255, 216, 77, 0.22);
+  background: rgba(255, 216, 77, 0.04);
 }
 
 .player-list {

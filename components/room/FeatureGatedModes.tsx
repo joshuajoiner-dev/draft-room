@@ -96,9 +96,17 @@ function storeLocalUnlock(unlock: unknown) {
   }
 }
 
-function LockedModeCard({ title, description }: { title: string; description: string }) {
+function LockedModeCard({
+  description,
+  modeTone,
+  title
+}: {
+  description: string;
+  modeTone: "green" | "orange";
+  title: string;
+}) {
   return (
-    <section className="card form locked-mode" aria-label={`${title} locked`}>
+    <section className={`card form locked-mode mode-card mode-card--${modeTone}`} aria-label={`${title} locked`}>
       <div className="stack-tight">
         <h2>{title}</h2>
         <p className="muted">{description}</p>
@@ -167,43 +175,11 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
 
   return (
     <>
-      <section className="card form" data-testid="complete-unlock">
-        <div className="stack-tight">
-          <h2>{FOUNDER_ACCESS_ENABLED ? "Founder Access" : "Enter Unlock Code"}</h2>
-          <p className="muted">
-            {FOUNDER_ACCESS_ENABLED
-              ? FOUNDER_ACCESS_MESSAGE
-              : "Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more."}
-          </p>
-        </div>
-
-        {message ? <div className={message.tone === "success" ? "success" : "error"}>{message.text}</div> : null}
-
-        {!isUnlocked ? (
-          <form className="unlock-form" onSubmit={handleSubmit}>
-            <label className="label">
-              Unlock code
-              <input
-                autoCapitalize="characters"
-                className="input"
-                name="code"
-                placeholder="ENTER CODE"
-                required
-                type="text"
-              />
-            </label>
-
-            <button className="button button-orange unlock-submit" type="submit" disabled={isPending}>
-              {isPending ? "Checking..." : "Unlock Complete"}
-            </button>
-          </form>
-        ) : null}
-      </section>
-
       {!isUnlocked ? (
         <LockedModeCard
-          title="⚡ Quick Random"
           description="Assign players completely at random for the fastest possible team split."
+          modeTone="green"
+          title="⚡ Quick Random"
         />
       ) : null}
 
@@ -211,12 +187,53 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
 
       {!isUnlocked ? (
         <LockedModeCard
-          title="👥 Captain Draft"
           description="Choose one captain per team. Captains start on their own teams."
+          modeTone="orange"
+          title="👥 Captain Draft"
         />
       ) : null}
 
       <div hidden={!isUnlocked}>{captainDraft}</div>
+
+      <section className="founder-access-panel" data-testid="complete-unlock">
+        {FOUNDER_ACCESS_ENABLED ? (
+          <>
+            <h3 className="founder-access-heading">Founder Access</h3>
+            <p className="founder-access-note muted">{FOUNDER_ACCESS_MESSAGE}</p>
+          </>
+        ) : (
+          <>
+            <div className="stack-tight">
+              <h2>Enter Unlock Code</h2>
+              <p className="muted">
+                Unlock Complete on this browser to access Captain Draft, templates, statistic keeping, and more.
+              </p>
+            </div>
+
+            {message ? <div className={message.tone === "success" ? "success" : "error"}>{message.text}</div> : null}
+
+            {!isUnlocked ? (
+              <form className="unlock-form" onSubmit={handleSubmit}>
+                <label className="label">
+                  Unlock code
+                  <input
+                    autoCapitalize="characters"
+                    className="input"
+                    name="code"
+                    placeholder="ENTER CODE"
+                    required
+                    type="text"
+                  />
+                </label>
+
+                <button className="button button-orange unlock-submit" type="submit" disabled={isPending}>
+                  {isPending ? "Checking..." : "Unlock Complete"}
+                </button>
+              </form>
+            ) : null}
+          </>
+        )}
+      </section>
     </>
   );
 }

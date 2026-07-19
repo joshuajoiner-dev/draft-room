@@ -85,7 +85,10 @@ export function ManualAdminTimer({ playerCount = 0, teamCount = 0 }: ManualAdmin
   }
 
   return (
-    <section className="manual-admin-timer" aria-label="Manual admin timer">
+    <section
+      aria-label="Manual admin timer"
+      className={`manual-admin-timer${secondsLeft === 0 && !isRunning ? " manual-admin-timer--elapsed" : ""}`}
+    >
       <div className="manual-timer-header">
         <p className="admin-panel-label">Manual Timer</p>
         <strong aria-live="polite" className="digital-time">

@@ -62,7 +62,9 @@ export function RoomPlayerList({ roomId, players, teamCount = 0 }: RoomPlayerLis
   }, [roomId]);
 
   return (
-    <section className="card stack">
+    <section
+      className={`card stack players-panel${visiblePlayers.length ? " players-panel--active" : ""}`}
+    >
       <div className="stack-tight">
         <h2>Players</h2>
         <p className="muted">{visiblePlayers.length ? `${visiblePlayers.length} in the room` : "No players yet."}</p>
