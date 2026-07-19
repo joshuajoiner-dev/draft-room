@@ -22,6 +22,7 @@ pnpm-debug.log*
 # local artifacts
 outputs/
 work/
+.pnpm-store/
 
 # system files
 .DS_Store
