@@ -31,8 +31,8 @@ Assumes macOS or Linux with network access.
 | Tool | Requirement |
 | --- | --- |
 | **Git** | Required |
-| **Node.js** | **20.x** (see `.nvmrc`; also documented in `DEPLOY.md`) |
-| **pnpm** | **11.15.0** (declared in `package.json` → `packageManager`) |
+| **Node.js** | **22.x** (see `.nvmrc`; minimum **22.13.0** per `package.json` → `engines`) |
+| **pnpm** | **11.15.0** (declared in `package.json` → `packageManager`; requires Node **>= 22.13.0**) |
 | **Corepack** | Recommended. Run `corepack enable` to install the pinned pnpm version automatically |
 
 Use nvm or similar to match the checked-in Node version:
@@ -145,7 +145,7 @@ pnpm build
 
 This repository does not define a separate `test` script in `package.json` as of this guide.
 
-Continuous integration runs on GitHub Actions (`.github/workflows/ci.yml`): frozen lockfile install, `pnpm lint`, and `pnpm build` on Node 20. No GitHub Secrets are required for CI — the build completes without environment variables.
+Continuous integration runs on GitHub Actions (`.github/workflows/ci.yml`): frozen lockfile install, `pnpm lint`, and `pnpm build` on Node 22. No GitHub Secrets are required for CI — the build completes without environment variables.
 
 Optional manual QA assets exist under `docs/design/qa/`.
 
@@ -207,7 +207,7 @@ Framework Preset: Next.js
 Build Command: pnpm build
 Install Command: pnpm install
 Output Directory: .next
-Node.js Version: 20.x (see `.nvmrc`)
+Node.js Version: 22.x (see `.nvmrc`; minimum 22.13.0)
 ```
 
 ### Production health check (no secrets returned)

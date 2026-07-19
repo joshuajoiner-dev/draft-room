@@ -26,7 +26,7 @@ Framework Preset: Next.js
 Build Command: pnpm build
 Install Command: pnpm install
 Output Directory: .next
-Node.js Version: 20.x or newer
+Node.js Version: 22.x (see `.nvmrc`)
 ```
 
 ## 3. Configure Environment Variables
@@ -77,4 +77,4 @@ Manual checklist:
 - Database errors: confirm `supabase/schema.sql` was applied to the same Supabase project used by Vercel.
 - QR code does not render: confirm browser JavaScript is enabled and the page has loaded fully.
 - Join link uses the wrong host: confirm the deployed app is opened from the intended Vercel production domain.
-- Build fails on Vercel: confirm Vercel uses Node.js 20.x or newer and installs with `pnpm install`.
+- Build fails on Vercel: confirm Vercel uses Node.js 22.x (see `.nvmrc`) and installs with `pnpm install`.
