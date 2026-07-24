@@ -103,7 +103,9 @@ export function CaptainDraftBoard({
           <p className="muted">Draft order follows the team order.</p>
         </div>
 
-        {isComplete ? <PrintTeamsButton /> : null}
+        {isComplete ? (
+          <PrintTeamsButton playerCount={players.length} roomMode="captain_draft" teamCount={teams.length} />
+        ) : null}
 
         {canOverride ? (
           <form action={undoLatestAssignment.bind(null, roomId, "draft")} className="print-hidden">

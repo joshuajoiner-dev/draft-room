@@ -1,19 +1,29 @@
 import { reassignPlayer, unassignPlayer, undoLatestAssignment } from "@/lib/room/actions";
 import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { PrintTeamsButton } from "@/components/room/PrintTeamsButton";
-import type { Player, RoomStatus, Team, TeamAssignment } from "@/types/database";
+import type { Player, RoomStatus, Team, TeamAssignment, TeamCreationMode } from "@/types/database";
 
 type GeneratedTeamsProps = {
   roomId: string;
   roomName: string;
   roomCode: string;
   roomStatus: RoomStatus;
+  roomMode: TeamCreationMode | null;
   teams: Team[];
   assignments: TeamAssignment[];
   players: Player[];
 };
 
-export function GeneratedTeams({ roomId, roomName, roomCode, roomStatus, teams, assignments, players }: GeneratedTeamsProps) {
+export function GeneratedTeams({
+  roomId,
+  roomName,
+  roomCode,
+  roomStatus,
+  roomMode,
+  teams,
+  assignments,
+  players
+}: GeneratedTeamsProps) {
   if (!teams.length) {
     return null;
   }
@@ -41,7 +51,7 @@ export function GeneratedTeams({ roomId, roomName, roomCode, roomStatus, teams, 
         <p className="muted">{teams.length} teams generated from the current room players.</p>
       </div>
 
-      <PrintTeamsButton />
+      <PrintTeamsButton playerCount={players.length} roomMode={roomMode} teamCount={teams.length} />
 
       {canOverride ? (
         <form action={undoLatestAssignment.bind(null, roomId, "admin")} className="print-hidden">
