@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { headers } from "next/headers";
+import { AnalyticsSuccessEvents } from "@/components/analytics/AnalyticsSuccessEvents";
 import { AppFrame } from "@/components/layout/AppFrame";
 import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
@@ -22,13 +23,16 @@ type AdminPageProps = {
     roomId: string;
   };
   searchParams: {
+    ae?: string;
     error?: string;
     imported?: string;
     duplicates?: string;
     teams?: string;
     balancedTeams?: string;
     captainTeams?: string;
+    captainsRandomized?: string;
     assigned?: string;
+    created?: string;
   };
 };
 
@@ -68,6 +72,17 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
 
   return (
     <AppFrame variant="wide">
+      <AnalyticsSuccessEvents
+        context={{
+          page: "admin",
+          roomId: room.id,
+          playerCount: players.length,
+          teamCount: teams.length,
+          roomMode: room.team_creation_mode,
+          roomNamePresent: Boolean(room.name.trim()),
+          roomCodePresent: Boolean(room.join_code.trim())
+        }}
+      />
       <div className="stack">
         <div className="event-control-layout">
           <aside className="event-control-column event-control-left" aria-label="Room command rail">
@@ -123,6 +138,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
             roomName={room.name}
             roomCode={room.join_code}
             roomStatus={room.status}
+            roomMode={room.team_creation_mode}
             teams={teams}
             assignments={assignments}
             players={players}

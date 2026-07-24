@@ -150,7 +150,7 @@ export async function createRoom(formData: FormData) {
     const { data, error: insertError } = result;
 
     if (data) {
-      redirect(`/room/${data.id}/admin`);
+      redirect(`/room/${data.id}/admin?created=1&ae=${Date.now()}`);
     }
 
     if (insertError?.code !== "23505") {
@@ -196,7 +196,7 @@ export async function addPlayerToRoom(roomId: string, createdByAdmin: boolean, f
     redirect(`/room/${roomId}/admin`);
   }
 
-  redirect(`/room/${roomId}`);
+  redirect(`/room/${roomId}?joined=1&ae=${Date.now()}`);
 }
 
 function parseImportedNames(value: FormDataEntryValue | null) {
@@ -433,7 +433,7 @@ async function generateTeams(roomId: string, formData: FormData, mode: "random_t
   revalidatePath(`/room/${roomId}/admin`);
 
   const queryType = mode === "balanced_random" ? "balancedTeams" : "teams";
-  redirect(`/room/${roomId}/admin?${queryType}=${teamCount}&assigned=${roomPlayers.length}`);
+  redirect(`/room/${roomId}/admin?${queryType}=${teamCount}&assigned=${roomPlayers.length}&ae=${Date.now()}`);
 }
 
 export async function generateRandomTeams(roomId: string, formData: FormData) {
@@ -444,7 +444,7 @@ export async function generateBalancedRandomTeams(roomId: string, formData: Form
   await generateTeams(roomId, formData, "balanced_random");
 }
 
-async function createCaptainDraftSetup(roomId: string, captainIds: string[]) {
+async function createCaptainDraftSetup(roomId: string, captainIds: string[], captainsRandomized: boolean) {
   const supabase = createSupabaseServerClient();
   const [{ data: room, error: roomError }, { data: players, error: playersError }] = await Promise.all([
     supabase.from("rooms").select("status").eq("id", roomId).single(),
@@ -512,7 +512,9 @@ async function createCaptainDraftSetup(roomId: string, captainIds: string[]) {
   revalidatePath(`/room/${roomId}`);
   revalidatePath(`/room/${roomId}/admin`);
 
-  redirect(`/room/${roomId}/admin?captainTeams=${captainIds.length}`);
+  redirect(
+    `/room/${roomId}/admin?captainTeams=${captainIds.length}&captainsRandomized=${captainsRandomized ? 1 : 0}&ae=${Date.now()}`
+  );
 }
 
 export async function setupCaptainDraft(roomId: string, formData: FormData) {
@@ -528,7 +530,7 @@ export async function setupCaptainDraft(roomId: string, formData: FormData) {
     redirect(`/room/${roomId}/admin?error=${encodeURIComponent("Choose one captain for each team.")}`);
   }
 
-  await createCaptainDraftSetup(roomId, captainIds);
+  await createCaptainDraftSetup(roomId, captainIds, false);
 }
 
 export async function randomizeCaptains(roomId: string, formData: FormData) {
@@ -555,7 +557,8 @@ export async function randomizeCaptains(roomId: string, formData: FormData) {
     roomId,
     shuffle(roomPlayers)
       .slice(0, teamCount)
-      .map((player) => player.id)
+      .map((player) => player.id),
+    true
   );
 }
 

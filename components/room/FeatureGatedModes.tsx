@@ -3,6 +3,7 @@
 import type { FormEvent, ReactNode } from "react";
 import { useEffect, useState, useTransition } from "react";
 import { validateUnlockCode } from "@/lib/room/actions";
+import { trackEvent, trackEventOnce } from "@/lib/analytics";
 
 const COMPLETE_UNLOCK_KEY = "draft-room-complete-unlocked";
 // Temporary launch access: flip this off when the first 100-user feedback window ends.
@@ -105,8 +106,25 @@ function LockedModeCard({
   modeTone: "green" | "orange";
   title: string;
 }) {
+  function handleCompleteInterestClick() {
+    trackEvent("complete_feature_interest", {
+      cta_label: "Included with Draft Room Complete",
+      source_component: "locked_mode_card"
+    });
+  }
+
   return (
-    <section className={`card form locked-mode mode-card mode-card--${modeTone}`} aria-label={`${title} locked`}>
+    <section
+      className={`card form locked-mode mode-card mode-card--${modeTone}`}
+      aria-label={`${title} locked`}
+      onClick={handleCompleteInterestClick}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          handleCompleteInterestClick();
+        }
+      }}
+      role="presentation"
+    >
       <div className="stack-tight">
         <h2>{title}</h2>
         <p className="muted">{description}</p>
@@ -149,6 +167,11 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
     const form = event.currentTarget;
     const formData = new FormData(form);
 
+    trackEvent("complete_feature_interest", {
+      cta_label: "Unlock Complete",
+      source_component: "feature_gated_modes"
+    });
+
     startTransition(async () => {
       const result = await validateUnlockCode(formData);
 
@@ -170,6 +193,13 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
         tone: "error",
         text: result.message
       });
+    });
+  }
+
+  function handleFounderAccessInteraction(interactionType: string) {
+    trackEventOnce(`founder_access:${interactionType}`, "founder_access_interaction", {
+      interaction_type: interactionType,
+      source_component: "feature_gated_modes"
     });
   }
 
@@ -195,7 +225,17 @@ export function FeatureGatedModes({ quickRandom, captainDraft }: FeatureGatedMod
 
       <div hidden={!isUnlocked}>{captainDraft}</div>
 
-      <section className="founder-access-panel" data-testid="complete-unlock">
+      <section
+        className="founder-access-panel"
+        data-testid="complete-unlock"
+        onClick={() => handleFounderAccessInteraction("panel_click")}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            handleFounderAccessInteraction("panel_keypress");
+          }
+        }}
+        role="presentation"
+      >
         {FOUNDER_ACCESS_ENABLED ? (
           <>
             <h3 className="founder-access-heading">Founder Access</h3>

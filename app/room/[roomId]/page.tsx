@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { headers } from "next/headers";
+import { AnalyticsSuccessEvents } from "@/components/analytics/AnalyticsSuccessEvents";
 import { AppFrame } from "@/components/layout/AppFrame";
 import { QRCodePanel } from "@/components/room/QRCodePanel";
 import { RoomHeader } from "@/components/room/RoomHeader";
@@ -9,6 +10,10 @@ import { getRoomState } from "@/lib/room/queries";
 type RoomPageProps = {
   params: {
     roomId: string;
+  };
+  searchParams: {
+    ae?: string;
+    joined?: string;
   };
 };
 
@@ -26,6 +31,13 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
   return (
     <AppFrame>
+      <AnalyticsSuccessEvents
+        context={{
+          page: "room",
+          roomId: room.id,
+          roomCodePresent: Boolean(room.join_code.trim())
+        }}
+      />
       <div className="stack">
         <RoomHeader room={room} />
 

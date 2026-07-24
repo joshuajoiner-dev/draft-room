@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { VenuePresentation } from "@/components/presentation/VenuePresentation";
+import { trackEvent, trackEventOnce } from "@/lib/analytics";
 
 type QRCodePanelProps = {
   joinUrl: string;
@@ -36,9 +37,36 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
     };
   }, [joinUrl]);
 
+  const trackQrCodeView = useCallback(() => {
+    trackEventOnce(`view_qr_code:${window.location.pathname}`, "view_qr_code", {
+      room_code_present: Boolean(roomCode.trim()),
+      source_component: "qr_code_panel"
+    });
+  }, [roomCode]);
+
+  useEffect(() => {
+    if (window.location.hash !== "#room-qr-code") {
+      return;
+    }
+
+    trackQrCodeView();
+  }, [roomCode, trackQrCodeView]);
+
   async function copyJoinLink() {
-    await navigator.clipboard.writeText(joinUrl);
-    setCopyStatus("Copied");
+    try {
+      await navigator.clipboard.writeText(joinUrl);
+      setCopyStatus("Copied");
+      trackEvent("copy_invite_link", {
+        room_code_present: Boolean(roomCode.trim()),
+        source_component: "qr_code_panel"
+      });
+    } catch {
+      setCopyStatus("");
+    }
+  }
+
+  function handleShareQrClick() {
+    trackQrCodeView();
   }
 
   return (
@@ -56,7 +84,11 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
         <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
           Copy Link
         </button>
-        <a className="button button-secondary share-qr-button" href="#room-qr-code">
+        <a
+          className="button button-secondary share-qr-button"
+          href="#room-qr-code"
+          onClick={handleShareQrClick}
+        >
           Share QR
         </a>
       </div>
