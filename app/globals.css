@@ -774,6 +774,134 @@ select {
   }
 }
 
+/* In-room launch partner artwork (admin) */
+.launch-partner-slot {
+  width: 100%;
+  max-width: 100%;
+  opacity: 0.9;
+  filter: saturate(0.86);
+}
+
+.launch-partner-link {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+
+.launch-partner-link:hover,
+.launch-partner-link:focus-visible {
+  filter: saturate(1);
+  opacity: 1;
+}
+
+.launch-partner-art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.launch-partner-art--square {
+  object-fit: contain;
+  max-height: 72px;
+}
+
+.launch-partner-art--horizontal,
+.launch-partner-art--ribbon {
+  object-fit: cover;
+  aspect-ratio: 1024 / 94;
+  max-height: 56px;
+}
+
+.launch-partner-art--compact {
+  object-fit: contain;
+  max-height: 48px;
+}
+
+.launch-partner-presented-block {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.launch-partner-presented-label {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.launch-partner-lower-band {
+  display: grid;
+  gap: 12px;
+  align-items: end;
+}
+
+.launch-partner-open-signage {
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.launch-partner-open-label {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.launch-partner-open-title {
+  display: block;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.launch-partner-open-tagline {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.empty-state .launch-partner-slot--compact {
+  margin-top: 12px;
+  max-width: 320px;
+}
+
+.launch-partner-visibility--desktop-column,
+.launch-partner-visibility--footer-ribbon,
+.launch-partner-visibility--open-slot,
+.launch-partner-visibility--waiting-desktop {
+  display: none;
+}
+
+.launch-partner-visibility--primary-mobile {
+  display: block;
+}
+
+@media (min-width: 640px) and (max-width: 979px) {
+  .launch-partner-visibility--open-slot {
+    display: block;
+  }
+}
+
+@media (min-width: 980px) {
+  .launch-partner-visibility--desktop-column,
+  .launch-partner-visibility--footer-ribbon,
+  .launch-partner-visibility--open-slot,
+  .launch-partner-visibility--waiting-desktop {
+    display: block;
+  }
+
+  .launch-partner-lower-band {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  }
+}
+
 .manual-timer-header {
   display: flex;
   align-items: baseline;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { VenuePresentation } from "@/components/presentation/VenuePresentation";
+import type { ReactNode } from "react";
 import { createSupabaseBrowserClient, hasSupabaseConfig } from "@/lib/db/client";
 import type { Player } from "@/types/database";
 
@@ -9,9 +9,10 @@ type RoomPlayerListProps = {
   roomId: string;
   players: Player[];
   teamCount?: number;
+  waitingPartner?: ReactNode;
 };
 
-export function RoomPlayerList({ roomId, players, teamCount = 0 }: RoomPlayerListProps) {
+export function RoomPlayerList({ roomId, players, teamCount = 0, waitingPartner }: RoomPlayerListProps) {
   const [visiblePlayers, setVisiblePlayers] = useState(players);
 
   useEffect(() => {
@@ -83,10 +84,7 @@ export function RoomPlayerList({ roomId, players, teamCount = 0 }: RoomPlayerLis
         <div className="empty-state">
           <p>No one has joined yet.</p>
           <p className="muted">Share the join link or scan the QR code to fill the room.</p>
-          <VenuePresentation
-            context={{ playerCount: visiblePlayers.length, teamCount, surface: "admin" }}
-            placement="waiting_screen"
-          />
+          {waitingPartner}
         </div>
       )}
     </section>
