@@ -7,3 +7,8 @@ export function buildPublicRoomPath(joinCode: string) {
 export function buildPublicRoomUrl(origin: string, joinCode: string) {
   return `${origin.replace(/\/$/, "")}${buildPublicRoomPath(joinCode)}`;
 }
+
+/** Host/path display for UI (full HTTPS still used for copy and QR). */
+export function formatPublicRoomUrlForDisplay(fullUrl: string) {
+  return fullUrl.replace(/^https?:\/\//i, "");
+}

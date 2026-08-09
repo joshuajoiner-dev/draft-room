@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { VenuePresentation } from "@/components/presentation/VenuePresentation";
+import { formatPublicRoomUrlForDisplay } from "@/lib/room/publicRoomUrl";
 import { trackEvent, trackEventOnce } from "@/lib/analytics";
 
 type QRCodePanelProps = {
@@ -69,6 +70,8 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
     trackQrCodeView();
   }
 
+  const publicUrlDisplay = formatPublicRoomUrlForDisplay(joinUrl);
+
   return (
     <section className="card stack qr-card">
       <div className="stack-tight">
@@ -81,9 +84,6 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
           <span>Room Code</span>
           <strong>{roomCode}</strong>
         </div>
-        <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
-          Copy Link
-        </button>
         <a
           className="button button-secondary share-qr-button"
           href="#room-qr-code"
@@ -91,6 +91,20 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
         >
           Share QR
         </a>
+      </div>
+
+      <div className="public-invite-row">
+        <a
+          className="public-invite-url"
+          href={joinUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {publicUrlDisplay}
+        </a>
+        <button aria-label="Copy full join link" className="button copy-link-button" onClick={copyJoinLink} type="button">
+          Copy Link
+        </button>
       </div>
 
       {copyStatus ? (

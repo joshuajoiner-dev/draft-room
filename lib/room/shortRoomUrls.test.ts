@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildPublicRoomPath, buildPublicRoomUrl } from "./publicRoomUrl";
+import { buildPublicRoomPath, buildPublicRoomUrl, formatPublicRoomUrlForDisplay } from "./publicRoomUrl";
 import { isValidJoinCodeFormat, normalizeRoomCode, parsePublicRoomCodeParam } from "./roomCode";
 
 describe("roomCode", () => {
@@ -37,5 +37,12 @@ describe("publicRoomUrl", () => {
 
     assert.equal(url, "https://joindraftpick.com/r/87ZMAB");
     assert.equal(url.includes("/room/"), false);
+  });
+
+  it("formats display URLs without the scheme", () => {
+    assert.equal(
+      formatPublicRoomUrlForDisplay("https://joindraftpick.com/r/87ZMAB"),
+      "joindraftpick.com/r/87ZMAB"
+    );
   });
 });
