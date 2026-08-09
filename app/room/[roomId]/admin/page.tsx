@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import { AnalyticsSuccessEvents } from "@/components/analytics/AnalyticsSuccessEvents";
 import { AppFrame } from "@/components/layout/AppFrame";
 import { VenuePresentation } from "@/components/presentation/VenuePresentation";
@@ -17,6 +16,9 @@ import { RandomTeamsForm } from "@/components/room/RandomTeamsForm";
 import { RoomHeader } from "@/components/room/RoomHeader";
 import { RoomPlayerList } from "@/components/room/RoomPlayerList";
 import { getRoomState } from "@/lib/room/queries";
+import { buildPublicRoomUrl } from "@/lib/room/publicRoomUrl";
+import { getRequestOrigin } from "@/lib/room/requestOrigin";
+import { normalizeRoomCode } from "@/lib/room/roomCode";
 
 type AdminPageProps = {
   params: {
@@ -36,17 +38,9 @@ type AdminPageProps = {
   };
 };
 
-function getOrigin() {
-  const requestHeaders = headers();
-  const host = requestHeaders.get("host") ?? "localhost:3000";
-  const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
-
-  return `${protocol}://${host}`;
-}
-
 export default async function AdminPage({ params, searchParams }: AdminPageProps) {
   const { room, players, teams, assignments } = await getRoomState(params.roomId);
-  const joinUrl = `${getOrigin()}/room/${room.id}/join`;
+  const joinUrl = buildPublicRoomUrl(getRequestOrigin(), normalizeRoomCode(room.join_code));
   const importedCount = Number(searchParams.imported ?? Number.NaN);
   const duplicateCount = Number(searchParams.duplicates ?? Number.NaN);
   const generatedTeamCount = Number(searchParams.teams ?? Number.NaN);

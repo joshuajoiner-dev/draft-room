@@ -1,8 +1,6 @@
-import Link from "next/link";
-import { AppFrame } from "@/components/layout/AppFrame";
-import { PlayerNameForm } from "@/components/room/PlayerNameForm";
-import { RoomHeader } from "@/components/room/RoomHeader";
-import { RoomPlayerList } from "@/components/room/RoomPlayerList";
+import { redirect } from "next/navigation";
+import { buildPublicRoomPath } from "@/lib/room/publicRoomUrl";
+import { normalizeRoomCode } from "@/lib/room/roomCode";
 import { getRoomState } from "@/lib/room/queries";
 
 type JoinPageProps = {
@@ -15,22 +13,9 @@ type JoinPageProps = {
 };
 
 export default async function JoinPage({ params, searchParams }: JoinPageProps) {
-  const { room, players } = await getRoomState(params.roomId);
+  const { room } = await getRoomState(params.roomId);
+  const destination = buildPublicRoomPath(normalizeRoomCode(room.join_code));
+  const query = searchParams.error ? `?error=${encodeURIComponent(searchParams.error)}` : "";
 
-  return (
-    <AppFrame>
-      <div className="stack">
-        <RoomHeader room={room} />
-
-        <div className="page-grid">
-          <PlayerNameForm roomId={room.id} error={searchParams.error} />
-          <RoomPlayerList roomId={room.id} players={players} />
-        </div>
-
-        <Link className="button button-secondary" href={`/room/${room.id}`}>
-          Back to Room
-        </Link>
-      </div>
-    </AppFrame>
-  );
+  redirect(`${destination}${query}`);
 }
