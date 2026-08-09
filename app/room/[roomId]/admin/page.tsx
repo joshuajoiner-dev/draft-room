@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { AnalyticsSuccessEvents } from "@/components/analytics/AnalyticsSuccessEvents";
 import { AppFrame } from "@/components/layout/AppFrame";
-import { VenuePresentation } from "@/components/presentation/VenuePresentation";
+import { LaunchPartnerPlacement } from "@/components/presentation/LaunchPartnerPlacement";
+import { LaunchPartnerPresentedBy } from "@/components/presentation/LaunchPartnerPresentedBy";
 import { BalancedRandomForm } from "@/components/room/BalancedRandomForm";
 import { CaptainDraftSetupForm } from "@/components/room/CaptainDraftSetupForm";
 import { CaptainDraftSummary } from "@/components/room/CaptainDraftSummary";
@@ -63,6 +64,11 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
     ? `Set up ${captainTeamCount} captain teams.`
     : undefined;
   const isCaptainDraft = room.team_creation_mode === "captain_draft";
+  const launchPartnerContext = {
+    roomId: room.id,
+    playerCount: players.length,
+    teamCount: teams.length
+  };
 
   return (
     <AppFrame variant="wide">
@@ -83,12 +89,32 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
             <RoomHeader room={room} />
 
             <EventScoreboard room={room} playerCount={players.length} teamCount={teams.length} />
+
+            <LaunchPartnerPlacement
+              {...launchPartnerContext}
+              placement="admin_left_below_overview"
+              variant="square"
+              visibilityClass="launch-partner-visibility--desktop-column"
+            />
           </aside>
 
           <main className="event-control-column event-control-center" aria-label="Primary event controls">
             <LiveEventPanel room={room} playerCount={players.length} teamCount={teams.length} />
             <QRCodePanel joinUrl={joinUrl} roomCode={room.join_code} />
-            <RoomPlayerList roomId={room.id} players={players} teamCount={teams.length} />
+            <LaunchPartnerPresentedBy {...launchPartnerContext} />
+            <RoomPlayerList
+              roomId={room.id}
+              players={players}
+              teamCount={teams.length}
+              waitingPartner={
+                <LaunchPartnerPlacement
+                  {...launchPartnerContext}
+                  placement="admin_waiting_players"
+                  variant="compact"
+                  visibilityClass="launch-partner-visibility--waiting-desktop"
+                />
+              }
+            />
             <PlayerNameForm roomId={room.id} createdByAdmin error={searchParams.error} message={importMessage} />
             <BalancedRandomForm
               roomId={room.id}
@@ -99,7 +125,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           </main>
 
           <aside className="event-control-column event-control-right" aria-label="Complete tools and event timer">
-            <ManualAdminTimer playerCount={players.length} teamCount={teams.length} />
+            <ManualAdminTimer />
             <div className="complete-features-stack">
               <p className="admin-panel-label">Complete Features</p>
               <FeatureGatedModes
@@ -121,6 +147,13 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
                 }
               />
             </div>
+
+            <LaunchPartnerPlacement
+              {...launchPartnerContext}
+              placement="admin_right_below_founder"
+              variant="compact"
+              visibilityClass="launch-partner-visibility--desktop-column"
+            />
           </aside>
         </div>
 
@@ -139,14 +172,24 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
           />
         )}
 
+        <div className="launch-partner-lower-band">
+          <LaunchPartnerPlacement
+            {...launchPartnerContext}
+            placement="admin_footer_ribbon"
+            variant="ribbon"
+            visibilityClass="launch-partner-visibility--footer-ribbon"
+          />
+          <LaunchPartnerPlacement
+            {...launchPartnerContext}
+            placement="admin_launch_partner_open"
+            variant="open"
+            visibilityClass="launch-partner-visibility--open-slot"
+          />
+        </div>
+
         <Link className="button button-secondary" href={`/room/${room.id}`}>
           View Teams
         </Link>
-
-        <VenuePresentation
-          context={{ playerCount: players.length, teamCount: teams.length, surface: "admin" }}
-          placement="footer"
-        />
       </div>
     </AppFrame>
   );

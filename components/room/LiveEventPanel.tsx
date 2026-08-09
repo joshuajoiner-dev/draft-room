@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import type { Room } from "@/types/database";
 
 type LiveEventPanelProps = {
@@ -29,11 +28,6 @@ export function LiveEventPanel({ children, playerCount, room, teamCount }: LiveE
       className={`live-event-panel${isLive ? " live-event-panel--active" : ""}`}
       aria-label="Live event status"
     >
-      <VenuePresentation
-        context={{ playerCount, teamCount, surface: "admin" }}
-        placement="leaderboard"
-      />
-
       <div className="live-event-header">
         <div className="live-event-title-group">
           <p className="admin-panel-label">Live Event</p>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 
 const TIME_PATTERN = /^\d{1,2}:\d{2}:\d{2}$/;
 
@@ -27,12 +26,7 @@ function formatSeconds(totalSeconds: number) {
   return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
 }
 
-type ManualAdminTimerProps = {
-  playerCount?: number;
-  teamCount?: number;
-};
-
-export function ManualAdminTimer({ playerCount = 0, teamCount = 0 }: ManualAdminTimerProps) {
+export function ManualAdminTimer() {
   const [inputValue, setInputValue] = useState("00:05:00");
   const [savedSeconds, setSavedSeconds] = useState(300);
   const [secondsLeft, setSecondsLeft] = useState(300);
@@ -134,12 +128,6 @@ export function ManualAdminTimer({ playerCount = 0, teamCount = 0 }: ManualAdmin
           Reset
         </button>
       </div>
-
-      <VenuePresentation
-        context={{ playerCount, teamCount, surface: "admin" }}
-        placement="timer_panel"
-        variant="mark"
-      />
     </section>
   );
 }

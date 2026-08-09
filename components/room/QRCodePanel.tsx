@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { VenuePresentation } from "@/components/presentation/VenuePresentation";
 import { formatPublicRoomUrlForDisplay } from "@/lib/room/publicRoomUrl";
 import { trackEvent, trackEventOnce } from "@/lib/analytics";
 
@@ -122,8 +121,6 @@ export function QRCodePanel({ joinUrl, roomCode }: QRCodePanelProps) {
           </div>
         )}
       </div>
-
-      <VenuePresentation placement="below_qr" />
     </section>
   );
 }

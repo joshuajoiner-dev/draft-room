@@ -43,4 +43,5 @@ export const venueSponsors: Partial<Record<VenueSponsorPlacement, VenueSponsor>>
   }
 };
 
-export const ENABLE_VENUE_SPONSORS = true;
+/** Text demo sponsors; in-room admin uses image launch partners instead. */
+export const ENABLE_VENUE_SPONSORS = false;
