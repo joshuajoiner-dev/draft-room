@@ -1400,6 +1400,36 @@ a:focus-visible {
   gap: 10px;
 }
 
+.public-invite-row {
+  display: grid;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.public-invite-url {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--muted);
+  font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  padding: 10px 12px;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.public-invite-url:hover,
+.public-invite-url:focus-visible {
+  border-color: rgba(46, 199, 255, 0.28);
+  color: rgba(255, 255, 255, 0.82);
+}
+
 .copy-link-button {
   box-shadow: 0 0 0 3px rgba(97, 239, 98, 0.12);
 }
@@ -1430,7 +1460,12 @@ a:focus-visible {
 
 @media (min-width: 560px) {
   .join-link-row {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: stretch;
+  }
+
+  .public-invite-row {
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: stretch;
   }
 }
@@ -1714,6 +1749,7 @@ a:focus-visible {
   .room-header,
   .qr-box,
   .join-link-row,
+  .public-invite-row,
   .copy-status,
   .toast,
   .print-hidden,

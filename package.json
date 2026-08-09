@@ -10,7 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "npx tsx --test lib/room/shortRoomUrls.test.ts lib/analytics.privacy.test.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
