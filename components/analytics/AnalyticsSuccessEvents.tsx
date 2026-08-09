@@ -20,8 +20,13 @@ type RoomAnalyticsContext = {
   roomCodePresent: boolean;
 };
 
+type ShortRoomAnalyticsContext = {
+  page: "short_room";
+  roomCodePresent: boolean;
+};
+
 type AnalyticsSuccessEventsProps = {
-  context: AdminAnalyticsContext | RoomAnalyticsContext;
+  context: AdminAnalyticsContext | RoomAnalyticsContext | ShortRoomAnalyticsContext;
 };
 
 function AnalyticsSuccessEventsInner({ context }: AnalyticsSuccessEventsProps) {
@@ -86,6 +91,13 @@ function AnalyticsSuccessEventsInner({ context }: AnalyticsSuccessEventsProps) {
     if (context.page === "room" && searchParams.get("joined") === "1") {
       trackEventOnce(`join_room:${ae}`, "join_room", {
         join_method: "name_form",
+        room_code_present: context.roomCodePresent
+      });
+    }
+
+    if (context.page === "short_room" && searchParams.get("joined") === "1") {
+      trackEventOnce(`join_room:${ae}`, "join_room", {
+        join_method: "short_room_url",
         room_code_present: context.roomCodePresent
       });
     }

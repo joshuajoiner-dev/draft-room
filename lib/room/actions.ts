@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { validateLicenseUnlockCode } from "@/lib/commerce/licenses";
 import { createSupabaseServerClient, getSupabaseHost } from "@/lib/db/client";
+import { buildPublicRoomPath } from "@/lib/room/publicRoomUrl";
+import { getRoomJoinCode } from "@/lib/room/queries";
 import { normalizeName, validatePlayerName, validateRoomName } from "@/lib/room/validation";
 
 type OverrideReturnTarget = "admin" | "draft";
@@ -26,6 +28,21 @@ function revalidateRoomPaths(roomId: string) {
   revalidatePath(`/room/${roomId}`);
   revalidatePath(`/room/${roomId}/admin`);
   revalidatePath(`/room/${roomId}/draft`);
+}
+
+async function revalidatePublicRoomPaths(roomId: string) {
+  const joinCode = await getRoomJoinCode(roomId);
+
+  if (joinCode) {
+    revalidatePath(buildPublicRoomPath(joinCode));
+  }
+}
+
+async function participantPublicPath(roomId: string, query?: string) {
+  const joinCode = await getRoomJoinCode(roomId);
+  const base = joinCode ? buildPublicRoomPath(joinCode) : `/room/${roomId}/join`;
+
+  return query ? `${base}?${query}` : base;
 }
 
 function getErrorMessage(error: unknown) {
@@ -172,8 +189,10 @@ export async function addPlayerToRoom(roomId: string, createdByAdmin: boolean, f
   const error = validatePlayerName(name);
 
   if (error) {
-    const target = createdByAdmin ? `/room/${roomId}/admin` : `/room/${roomId}/join`;
-    redirect(`${target}?error=${encodeURIComponent(error)}`);
+    const target = createdByAdmin
+      ? `/room/${roomId}/admin?error=${encodeURIComponent(error)}`
+      : await participantPublicPath(roomId, `error=${encodeURIComponent(error)}`);
+    redirect(target);
   }
 
   const supabase = createSupabaseServerClient();
@@ -184,19 +203,22 @@ export async function addPlayerToRoom(roomId: string, createdByAdmin: boolean, f
   });
 
   if (insertError) {
-    const target = createdByAdmin ? `/room/${roomId}/admin` : `/room/${roomId}/join`;
-    redirect(`${target}?error=${encodeURIComponent(insertError.message)}`);
+    const target = createdByAdmin
+      ? `/room/${roomId}/admin?error=${encodeURIComponent(insertError.message)}`
+      : await participantPublicPath(roomId, `error=${encodeURIComponent(insertError.message)}`);
+    redirect(target);
   }
 
   revalidatePath(`/room/${roomId}`);
   revalidatePath(`/room/${roomId}/admin`);
   revalidatePath(`/room/${roomId}/join`);
+  await revalidatePublicRoomPaths(roomId);
 
   if (createdByAdmin) {
     redirect(`/room/${roomId}/admin`);
   }
 
-  redirect(`/room/${roomId}?joined=1&ae=${Date.now()}`);
+  redirect(await participantPublicPath(roomId, `joined=1&ae=${Date.now()}`));
 }
 
 function parseImportedNames(value: FormDataEntryValue | null) {
